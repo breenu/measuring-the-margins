@@ -141,6 +141,18 @@ benign hits** in 3,456 responses — "cum" (cum laude), "negro" (culture history
 each standardized at ~9 SD; two in middle-class × white. Every regard and every Llama term
 reproduced. Full record: **`docs/r2_diagnosis.md`**. A no-lexicon re-score would be POST-HOC /
 exploratory only — not run; ask the human first. Lab A4000 rerun separates hardware from sampling.
+**24 Oct 2026, while the lab R2 ran:** (1) **fig7 REAL — all 7 figures now real.** New pure
+`margins.report.frames.frame_breakdown_rows` (P7's own `triangulate`, cluster bootstrap over
+prompts) + `scripts/build_frame_table.py`, wired into `process`'s tables stage. ⚠ The fig7 claim had
+been drafted on FIXTURE rows ("first_person most of all") and was FALSE on real data — first_person
+ranks 2nd/8th/4th/8th of 14; top frames are describe/daily_life (regard) and advice_given/advice
+(toxicity). Claim + caption rewritten to be data-neutral, and the attribution corrected: first_person
+was flagged as a KNOWN RISK in `configs/prompts/open_gen_v1.yaml`, not by the P4a phrase review.
+Lesson: **any figure text written against fixtures must be re-read against the real table.**
+(2) **README rewritten** for the public repo: status, a results section in honest wording, and the
+compute section now says what ran where and that R2-Kaggle FAILED 32/36 (with the diagnosis link);
+the undemonstrated "reproduces on free-tier cloud" line is gone. (3) The Kaggle notebook's
+`GITHUB_TOKEN` is now OPTIONAL (repo public; anonymous clone; scrubbing skips empty secrets).
 **NEXT: lab R2 (human, in progress 24 Oct) → r2-process lab → user labels → P12.**
 
 ### 📌 DECIDED 21 Sep 2026 — two things that bind BEFORE the P11 full run
