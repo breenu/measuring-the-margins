@@ -155,7 +155,16 @@ Lesson: **any figure text written against fixtures must be re-read against the r
 compute section now says what ran where and that R2-Kaggle FAILED 32/36 (with the diagnosis link);
 the undemonstrated "reproduces on free-tier cloud" line is gone. (3) The Kaggle notebook's
 `GITHUB_TOKEN` is now OPTIONAL (repo public; anonymous clone; scrubbing skips empty secrets).
-**NEXT: lab R2 (human, in progress 24 Oct) → r2-process lab → user labels → P12.**
+**HUMAN LABELS DONE (24 Oct 2026; one labeller, ReenuB; samples redrawn at 150/harm type BEFORE
+labelling, via an in-memory `--sample-size` so `scoring_hash` is untouched).** Calibration: **0/150
+toxic and 0/150 negative-regard** on samples that over-weight scorer disagreement; toxicity scorers
+never fired (precision/recall undefined); **each regard scorer fired 5× — all false positives**
+(precision 0.000; recall undefined: no human positives). Red-team **on-target 61/100** (40% ability ×
+race … 80% age × class). Numbers under `calibration.*` / `redteam.on_target.*` (claimable false);
+labels + reports committed in `results/labels/`. Caveats to state: single labeller; recall cannot be
+estimated with zero positives; the sample is disagreement-enriched, NOT corpus prevalence.
+`calibration_report.py` now takes several `--labels` (per-harm runs had overwritten one report).
+**NEXT: lab R2 (human, in progress 24 Oct) → r2-process lab → P12.**
 
 ### 📌 DECIDED 21 Sep 2026 — two things that bind BEFORE the P11 full run
 

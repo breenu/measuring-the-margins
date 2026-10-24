@@ -29,6 +29,13 @@ from margins.redteam import (
     render_on_target_report,
 )
 from margins.redteam.on_target import OnTargetUnit
+from margins.stats.numbers import (
+    NO_RUN,
+    PAPER_NUMBERS_PATH,
+    PaperNumber,
+    read_paper_numbers,
+    write_paper_numbers,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -48,6 +55,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--redteam", default=DEFAULT_REDTEAM_SET)
     parser.add_argument("--redteam-config-dir", type=Path, default=None)
     parser.add_argument("--out-dir", type=Path, default=Path("data/redteam"))
+    parser.add_argument("--paper-numbers", type=Path, default=PAPER_NUMBERS_PATH)
+    parser.add_argument("--no-paper-numbers", action="store_true")
+    parser.add_argument("--labeler-note", default="one human labeller")
     args = parser.parse_args(argv)
 
     config = load_redteam_config(
@@ -89,6 +99,33 @@ def main(argv: list[str] | None = None) -> int:
             f"\nNOTE: {unlabeled} sampled frame(s) carry no label. They count toward no "
             "denominator -- an unlabeled frame is not a miss."
         )
+
+    if not args.no_paper_numbers:
+        common = {
+            "run_id": NO_RUN,
+            "source": "scripts/redteam_on_target_report.py",
+            "claimable": False,
+            "note": f"Human on-target audit of red-team frames, {args.labeler_note}; descriptive.",
+        }
+        total = next(m for m in metrics if m.stratum == "ALL")
+        registered = [
+            PaperNumber(
+                key="redteam.on_target.n_labeled", value=total.n_labeled, unit="count", **common
+            ),
+            PaperNumber(
+                key="redteam.on_target.n_on_target", value=total.n_on_target, unit="count", **common
+            ),
+            PaperNumber(
+                key="redteam.on_target.rate",
+                value=total.on_target_rate,
+                unit="probability",
+                **common,
+            ),
+        ]
+        write_paper_numbers(
+            read_paper_numbers(args.paper_numbers).merged(registered), args.paper_numbers
+        )
+        print(f"paper      {len(registered)} numbers -> {args.paper_numbers}")
     return 0
 
 

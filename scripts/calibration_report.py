@@ -28,20 +28,42 @@ from margins.scoring.calibration import (
 )
 from margins.scoring.config import DEFAULT_SCORING, default_scoring_config_dir, load_scoring_config
 from margins.scoring.export import DEFAULT_SCORING_DIR, SCORES_FILENAME, read_scores
+from margins.stats.numbers import (
+    NO_RUN,
+    PAPER_NUMBERS_PATH,
+    PaperNumber,
+    read_paper_numbers,
+    write_paper_numbers,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--labels", type=Path, required=True, help="Hand-filled label JSONL.")
+    parser.add_argument(
+        "--labels",
+        type=Path,
+        nargs="+",
+        required=True,
+        help="Hand-filled label JSONL(s), e.g. one per harm type. They form ONE report.",
+    )
     parser.add_argument(
         "--scores", type=Path, nargs="+", default=[DEFAULT_SCORING_DIR / SCORES_FILENAME]
     )
     parser.add_argument("--scoring", default=DEFAULT_SCORING)
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_SCORING_DIR)
+    parser.add_argument("--paper-numbers", type=Path, default=PAPER_NUMBERS_PATH)
+    parser.add_argument("--no-paper-numbers", action="store_true")
+    parser.add_argument(
+        "--labeler-note",
+        default="one human labeller",
+        help="Recorded on every registered number (who labelled, how many labellers).",
+    )
     args = parser.parse_args(argv)
 
     config = load_scoring_config(args.scoring, config_dir=default_scoring_config_dir())
-    labels = read_labels(args.labels)
+    # One report over every harm type labelled: run per file, the second report used to overwrite
+    # the first (found on the first real labels, 24 Oct 2026).
+    labels = [label for path in args.labels for label in read_labels(path)]
     scores = [row for path in args.scores for row in read_scores(path)]
 
     metrics = calibration_metrics(scores, labels, config)
@@ -65,6 +87,45 @@ def main(argv: list[str] | None = None) -> int:
         handle.write(text)
 
     print(f"\nwrote {path}")
+
+    if not args.no_paper_numbers:
+        common = {
+            "run_id": NO_RUN,
+            "source": "scripts/calibration_report.py",
+            "claimable": False,
+            "note": f"Human calibration, {args.labeler_note}; a stratified sample that "
+            "over-weights scorer disagreement, so NOT an estimate of corpus prevalence.",
+        }
+        registered: list[PaperNumber] = []
+        for harm in sorted({m.harm_type for m in metrics if m.n}):
+            evaluated = [m for m in metrics if m.harm_type == harm and m.n]
+            for key, value in (
+                ("n_labeled", evaluated[0].n),
+                ("n_positive", evaluated[0].n_positive),
+            ):
+                registered.append(
+                    PaperNumber(
+                        key=f"calibration.{harm}.{key}", value=value, unit="count", **common
+                    )
+                )
+            for m in evaluated:
+                base = f"calibration.{harm}.{m.scorer_id}"
+                registered += [
+                    PaperNumber(
+                        key=f"{base}.false_positives",
+                        value=m.false_positives,
+                        unit="count",
+                        **common,
+                    ),
+                    PaperNumber(
+                        key=f"{base}.precision", value=m.precision, unit="probability", **common
+                    ),
+                    PaperNumber(key=f"{base}.recall", value=m.recall, unit="probability", **common),
+                ]
+        write_paper_numbers(
+            read_paper_numbers(args.paper_numbers).merged(registered), args.paper_numbers
+        )
+        print(f"paper      {len(registered)} numbers -> {args.paper_numbers}")
     return 0
 
 
