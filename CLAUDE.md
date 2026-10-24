@@ -132,7 +132,16 @@ rows; fig6 REAL (6/7 figures real; fig7 frame_breakdown still FIXTURE). Pooled a
 SD (T=0.7 / 1.0). ⚠ For toxicity the arms sit further from zero than the headline E1 estimate: the
 within-subset z (16 cells) stretches toxic_bert's small raw spread relative to the 110-cell headline
 scale — the reference marker exists to show this; say it in the paper, do not "fix" it.
-**NEXT: user labels → lab + Kaggle R2 runs → r2-process → P12.**
+**R2 KAGGLE RESULT (run 17 Oct, analysed 18 Oct 2026): FAIL by the pre-registered rule — it stands.**
+32/36 inside the original CI, 36/36 identical verdicts, max/RMS |Δ| 6.66/1.75 SE, exact match greedy
+0.112 / sampled 0.0003 (T4 fp16 vs A4000 bf16 → texts diverge). **All 4 failures are Mistral ×
+toxicity** (|Δ| ≤ 0.056 SD, tiny original SEs 0.005–0.011). Cause found: the **LDNOOBW lexicon**
+never fired on Mistral's original class × race responses (ref SD 6.2e-4), and the rerun had **4
+benign hits** in 3,456 responses — "cum" (cum laude), "negro" (culture history), "sexual" ×2 —
+each standardized at ~9 SD; two in middle-class × white. Every regard and every Llama term
+reproduced. Full record: **`docs/r2_diagnosis.md`**. A no-lexicon re-score would be POST-HOC /
+exploratory only — not run; ask the human first. Lab A4000 rerun separates hardware from sampling.
+**NEXT: lab R2 (human, in progress 24 Oct) → r2-process lab → user labels → P12.**
 
 ### 📌 DECIDED 21 Sep 2026 — two things that bind BEFORE the P11 full run
 
