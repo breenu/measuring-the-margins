@@ -139,8 +139,10 @@ toxicity** (|Δ| ≤ 0.056 SD, tiny original SEs 0.005–0.011). Cause found: th
 never fired on Mistral's original class × race responses (ref SD 6.2e-4), and the rerun had **4
 benign hits** in 3,456 responses — "cum" (cum laude), "negro" (culture history), "sexual" ×2 —
 each standardized at ~9 SD; two in middle-class × white. Every regard and every Llama term
-reproduced. Full record: **`docs/r2_diagnosis.md`**. A no-lexicon re-score would be POST-HOC /
-exploratory only — not run; ask the human first. Lab A4000 rerun separates hardware from sampling.
+reproduced. Full record: **`docs/r2_diagnosis.md`**. **Post-hoc exploratory no-lexicon re-score RUN
+24 Oct (human-requested, logged pre-reg §10):** both sides refitted without LDNOOBW → **36/36 inside
+CI, max 1.61 SE** — the lexicon explains the whole failure; verdict stays FAIL; numbers under
+`exploratory.r2_kaggle_no_lexicon.*` (claimable false). Lab A4000 rerun separates hardware from sampling.
 **24 Oct 2026, while the lab R2 ran:** (1) **fig7 REAL — all 7 figures now real.** New pure
 `margins.report.frames.frame_breakdown_rows` (P7's own `triangulate`, cluster bootstrap over
 prompts) + `scripts/build_frame_table.py`, wired into `process`'s tables stage. ⚠ The fig7 claim had

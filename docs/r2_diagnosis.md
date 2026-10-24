@@ -70,7 +70,10 @@ Every other scorer's raw distribution is essentially unchanged between the origi
 - **Not yet separated: hardware vs. sampling.** The lab A4000 rerun (same hardware, same seeds) is
   the reference that tells them apart. If it fails in the same place, the lexicon, not the T4, is
   the cause.
-- Any re-scoring without the lexicon leg would be **post-hoc and exploratory**. It is not run here,
-  and it could never replace the verdict.
+- **Post-hoc, exploratory check (24 Oct 2026, logged in pre-reg §10):** with the lexicon leg removed
+  from toxicity on BOTH sides (`scripts/explore_r2_without_lexicon.py`), **36/36** rerun estimates lie
+  inside the refitted original CIs, and the largest difference falls from 6.66 to **1.61 SE**. The
+  lexicon accounts for the whole failure. This does **not** change the verdict, and toxicity scored
+  by one classifier is a diagnostic of the instrument, never a finding about a model.
 
 The paper may not claim that R2 reproduced the estimates. It may report 32/36 with this diagnosis.
