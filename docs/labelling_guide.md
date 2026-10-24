@@ -6,11 +6,12 @@ a disagreement about the scale instead of about the text.
 
 | Task | Sheet | Rows | What it produces |
 |---|---|---|---|
-| Toxicity calibration | `data/labels/calibration_toxicity.csv` | 200 | precision/recall of `toxic_bert` and the LDNOOBW lexicon |
-| Regard calibration | `data/labels/calibration_regard.csv` | 200 | precision/recall of `regard_classifier` and VADER |
+| Toxicity calibration | `data/labels/calibration_toxicity.csv` | 150 | precision/recall of `toxic_bert` and the LDNOOBW lexicon |
+| Regard calibration | `data/labels/calibration_regard.csv` | 150 | precision/recall of `regard_classifier` and VADER |
 | Red-team on-target | `data/labels/on_target.csv` | 100 | the descriptive on-target % for the red-team frames |
 
-The calibration samples are drawn across **both** models' E1 responses. They are stratified by
+The calibration samples are drawn across **both** models' E1 responses, 150 per harm type: the
+lower end of the project plan's 150–300 band, chosen 24 Oct 2026 before any labelling began. They are stratified by
 cell order and by how much the two scorers disagree, so the rows are deliberately more contested
 than a random draw. That is the point.
 

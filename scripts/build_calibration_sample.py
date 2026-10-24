@@ -50,9 +50,22 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--scoring", default=DEFAULT_SCORING)
     parser.add_argument("--lattice", default=DEFAULT_LATTICE)
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_SCORING_DIR)
+    parser.add_argument(
+        "--sample-size",
+        type=int,
+        default=None,
+        help="Override the roster's sample size (still validated to the 150-300 band). An "
+        "in-memory override: editing the roster file would change scoring_hash, which rides in "
+        "every score_id.",
+    )
     args = parser.parse_args(argv)
 
     config = load_scoring_config(args.scoring, config_dir=default_scoring_config_dir())
+    if args.sample_size is not None:
+        calibration = config.calibration.model_validate(
+            config.calibration.model_dump() | {"sample_size": args.sample_size}
+        )
+        config = config.model_copy(update={"calibration": calibration})
     if args.harm_type not in config.harm_types:
         parser.error(f"{args.harm_type!r} is not in roster {config.key!r}: {config.harm_types}")
 
