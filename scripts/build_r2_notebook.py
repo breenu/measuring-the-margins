@@ -47,8 +47,8 @@ the repository's own pipeline at the pinned tag `{ref}`; nothing is measured her
 **Before running**
 1. *Settings -> Accelerator -> GPU T4 x2*, and *Internet -> On* (needs a phone-verified account).
 2. *Add-ons -> Secrets*: attach **`HF_TOKEN`** (read; the account must have accepted the Llama 3.1
-   licence) and **`GITHUB_TOKEN`** (a fine-grained, **read-only** token for
-   `breenu/mapping-the-margins`). The token never appears in a command or an error message.
+   licence). The repository is public, so no GitHub token is needed; an optional `GITHUB_TOKEN`
+   is used only if attached, and never appears in a command or an error message.
 3. Run with **Save Version -> Save & Run All (Commit)**, so it keeps running with the tab closed.
    Expect ~1 h of downloads and setup, then roughly 3-5 h of generation (both models at once).
 
@@ -81,10 +81,14 @@ try:
     _secrets = UserSecretsClient()
     # .strip(): a secret pasted with a leading space broke the clone URL on the first real run.
     os.environ["HF_TOKEN"] = _secrets.get_secret("HF_TOKEN").strip()
-    _github_token = _secrets.get_secret("GITHUB_TOKEN").strip()
 except Exception as error:
-    message = "Attach the HF_TOKEN and GITHUB_TOKEN secrets (Add-ons -> Secrets)."
+    message = "Attach the HF_TOKEN secret (Add-ons -> Secrets)."
     raise SystemExit(message) from error
+try:
+    # Optional since the repository went public (17 Oct 2026); needed only for a private fork.
+    _github_token = _secrets.get_secret("GITHUB_TOKEN").strip()
+except Exception:
+    _github_token = ""
 
 if not WORK.exists():
     # The token NEVER appears in a command line: a failed subprocess prints its argv, and on the
@@ -93,14 +97,17 @@ if not WORK.exists():
     # scrubbed of it before it is shown.
     import base64
 
-    _basic = base64.b64encode(f"x-access-token:{{_github_token}}".encode()).decode()
-    _env = {{
-        **os.environ,
-        "GIT_TERMINAL_PROMPT": "0",
-        "GIT_CONFIG_COUNT": "1",
-        "GIT_CONFIG_KEY_0": "http.https://github.com/.extraheader",
-        "GIT_CONFIG_VALUE_0": f"Authorization: Basic {{_basic}}",
-    }}
+    _env = {{**os.environ, "GIT_TERMINAL_PROMPT": "0"}}
+    _basic = ""
+    if _github_token:
+        _basic = base64.b64encode(f"x-access-token:{{_github_token}}".encode()).decode()
+        _env.update(
+            {{
+                "GIT_CONFIG_COUNT": "1",
+                "GIT_CONFIG_KEY_0": "http.https://github.com/.extraheader",
+                "GIT_CONFIG_VALUE_0": f"Authorization: Basic {{_basic}}",
+            }}
+        )
     _clone = subprocess.run(
         ["git", "clone", "--quiet", f"https://{{REPO}}", str(WORK)],
         env=_env,
@@ -108,10 +115,13 @@ if not WORK.exists():
         text=True,
     )
     if _clone.returncode != 0:
-        _detail = (_clone.stderr or "").replace(_github_token, "***").replace(_basic, "***")
+        _detail = _clone.stderr or ""
+        for _secret in (_github_token, _basic):
+            if _secret:  # str.replace("", ...) would insert *** between every character
+                _detail = _detail.replace(_secret, "***")
         raise SystemExit(
-            f"git clone failed (exit {{_clone.returncode}}). Check the GITHUB_TOKEN secret: a "
-            f"fine-grained token with Contents: Read-only on the repository.\\n{{_detail[-1500:]}}"
+            f"git clone failed (exit {{_clone.returncode}}). If a GITHUB_TOKEN is attached, it "
+            f"must have Contents: Read-only on the repository.\\n{{_detail[-1500:]}}"
         )
 sh(f"git checkout --quiet {{REF}}", cwd=WORK)
 sh("git log -1 --format='%H %s'", cwd=WORK)

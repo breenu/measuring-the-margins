@@ -312,7 +312,8 @@ def test_the_kaggle_notebook_never_puts_the_github_token_in_a_command() -> None:
     assert "x-access-token:{_github_token}@" not in code  # not in a URL
     assert "@{REPO}" not in code
     assert "extraheader" in code and "GIT_CONFIG_VALUE_0" in code  # sent as a header via env
-    assert 'replace(_github_token, "***")' in code  # scrubbed from any error text
+    assert 'replace(_secret, "***")' in code and "if _secret:" in code  # scrubbed, never ""
+    assert '_github_token = ""' in code  # optional: the repository is public
     assert ".strip()" in code  # the leading-space secret that broke the first clone
     assert "check=True" not in code.split("_clone = subprocess.run(")[1].split(")")[0]
     assert "--locked" in code and "pip install" not in code
