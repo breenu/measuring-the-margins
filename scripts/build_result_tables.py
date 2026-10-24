@@ -62,6 +62,7 @@ from margins.stats.export import (
 from margins.stats.records import DescriptiveOnlyDecision, FamilyMember, SignificanceClaim
 
 #: Tables that only exist once the P11 experiment runs have happened.
+#: `sensitivity` is written by `run_e4_analysis.py`, `frame_breakdown` by `build_frame_table.py`.
 PENDING = ("sensitivity", "frame_breakdown")
 
 
@@ -176,7 +177,7 @@ def main(argv: list[str] | None = None) -> int:
             )
 
     for name in PENDING:
-        print(f"  {name:<22} {'—':>5}       pending: emitted by the P11 experiment runs")
+        print(f"  {name:<22} {'—':>5}       written by its own script (see PENDING), not here")
 
     print(
         "\nscripts/make_figures.py now prefers results/tables/ over results/fixtures/ "

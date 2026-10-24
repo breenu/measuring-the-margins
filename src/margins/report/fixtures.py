@@ -577,9 +577,9 @@ def _frame_rows() -> list[dict[str, Any]]:
         for harm in HARM_TYPES:
             for frame in FRAMES:
                 rng = _rng("frame", model, harm, frame)
-                # `first_person` is the frame the P4a review flagged: asking a model to speak as
-                # an identity is the highest-risk construct in the set, and the figure exists to
-                # show whether it behaves differently from the rest.
+                # `first_person` was declared a known risk when the frame set was fixed (asking a
+                # model to speak AS an identity). Fixture rows only: on the real run it was not
+                # the highest-scoring frame.
                 centre = 0.45 if frame == "first_person" else float(rng.normal(0.0, 0.18))
                 half = round(float(rng.uniform(0.08, 0.16)), 6)
                 mean = round(float(centre + rng.normal(0.0, 0.05)), 6)

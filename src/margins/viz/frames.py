@@ -2,10 +2,13 @@
 
 **Two claims, and the second is the one that generalises.**
 
-1. The template frames are not interchangeable. ``first_person`` -- which asks the model to write
-   *as* an identity rather than about one -- is the highest-risk construct in the P4a set and the
-   one the phrase review flagged, so it is named on the figure rather than left for a reader to
-   find in a table.
+1. The template frames are not interchangeable: they elicit different levels of scored harm.
+   ``first_person`` -- which asks the model to write *as* an identity rather than about one -- is
+   marked because it was declared a KNOWN RISK when the frame set was fixed
+   (``configs/prompts/open_gen_v1.yaml``: the frame most likely to be scored for register rather
+   than harm). The mark is that design-time judgement, NOT a measured ranking: on the confirmatory
+   run first_person was not the highest-scoring frame in any panel (16 Oct 2026). The claim was
+   rewritten when the real table arrived; it had been drafted against fixture rows.
 2. **A frame is an item cluster.** The spread across frames is the between-cluster variance that
    bounds the achievable precision of the whole design (``docs/power_and_precision.md``): a design
    with one frame has none of it and cannot estimate a cluster-robust standard error at all. This
@@ -35,11 +38,13 @@ __all__ = ["build"]
 
 NAME = "fig7_frame_breakdown"
 CLAIM = (
-    "Template frames differ in the harm they elicit, first_person most of all; and the spread "
-    "across frames is the between-cluster variance that bounds the design's achievable precision."
+    "Template frames differ in the harm they elicit, and that spread is the between-cluster "
+    "variance that bounds the design's achievable precision; first_person is marked as the frame "
+    "flagged as a risk in advance, not as the highest-scoring."
 )
 
-#: Named because the P4a phrase review flagged it, not because of what it scored.
+#: Marked because it was declared a known risk when the frame set was fixed, not because of what
+#: it scored (on the confirmatory run it was not the highest-scoring frame in any panel).
 HIGHLIGHT: Final[str] = "first_person"
 
 
@@ -129,7 +134,7 @@ def build(source: NumberSource) -> FigureSpec:
         "mean standardized harm (SD) — a LEVEL, not an interaction", fontsize=8.0, y=0.225
     )
     axes[0][-1].legend(
-        loc="upper right", bbox_to_anchor=(1.0, -0.30), ncol=2, fontsize=6.4, borderaxespad=0.0
+        loc="lower right", bbox_to_anchor=(1.0, 1.10), ncol=2, fontsize=6.4, borderaxespad=0.0
     )
     figure.suptitle(
         "Frames are item clusters, and they are not interchangeable",
@@ -142,10 +147,11 @@ def build(source: NumberSource) -> FigureSpec:
         axes[0][0],
         "The spread across frames IS the between-cluster variance that bounds the design's\n"
         "precision. A single-frame audit has none of it and cannot estimate a cluster-robust\n"
-        "standard error at all. first_person is flagged by the P4a phrase review, not by score.",
+        "standard error at all. first_person is marked as a risk declared in advance, not by\n"
+        "its score.",
         y=-0.30,
     )
-    figure.subplots_adjust(left=0.16, right=0.98, top=0.86, bottom=0.30, wspace=0.10)
+    figure.subplots_adjust(left=0.16, right=0.98, top=0.82, bottom=0.30, wspace=0.10)
 
     return FigureSpec(
         name=NAME,
@@ -154,8 +160,9 @@ def build(source: NumberSource) -> FigureSpec:
         caption=(
             "Mean standardized harm per template frame with bootstrap intervals, one panel per "
             "confirmatory model. These are levels, not interactions: the unit is a template and "
-            "no emergence claim is made here. first_person is shaded because the P4a phrase "
-            "review flagged it as the highest-risk construct in the set."
+            "no emergence claim is made here. first_person is shaded because it was declared a "
+            "known risk when the frame set was fixed; the shading is that design-time judgement, "
+            "not a measured ranking."
         ),
         figure=figure,
         panels=tuple(AuditedPanel(ax, "x") for ax in axes[0]),

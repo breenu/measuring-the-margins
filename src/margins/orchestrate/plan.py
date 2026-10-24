@@ -612,6 +612,14 @@ def process_commands(
             argv += ["--descriptive-metrics-dir", *descriptive_dirs]
         argv += ["--out-dir", _p(layout.tables)]
         commands.append(Command("build_result_tables", tuple(argv)))
+        # Figure 7's table needs the item scores, which build_result_tables never reads.
+        frame_scores = [_p(layout.scoring("e1", m) / "scores.parquet") for m in cfg.e1.models]
+        commands.append(
+            Command(
+                "build_frame_table",
+                ("--scores", *frame_scores, "--out-dir", _p(layout.tables)),
+            )
+        )
     if "figures" in stages:
         # `essential` only: the two supporting figures read E4 sensitivity and per-frame tables
         # that P7/P9 do not emit; they arrive with the E4 runs, not with this processing pass.
