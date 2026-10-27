@@ -1,4 +1,4 @@
-# R2 on Kaggle: the verdict, and why it failed
+# R2: the verdicts on Kaggle and in the lab, and why both failed
 
 **Verdict: FAIL**, under the rule pre-registered on 16 Oct 2026 before any rerun existed
 (`docs/preregistration.md` §10). It stands. Nothing below changes it; this document records what
@@ -77,3 +77,58 @@ Every other scorer's raw distribution is essentially unchanged between the origi
   by one classifier is a diagnostic of the instrument, never a finding about a model.
 
 The paper may not claim that R2 reproduced the estimates. It may report 32/36 with this diagnosis.
+
+---
+
+## R2 in the lab (same hardware), 24–27 Oct 2026
+
+**Verdict: FAIL**, by the same pre-registered rule. It stands.
+
+- NVIDIA RTX A4000 (the card the original run used), both models at NF4, batch 8, commit `996337e`
+  (`r2-v1`), clean tree. The run spanned several sessions and resumed correctly.
+
+| | lab (A4000) | Kaggle (T4) |
+|---|---|---|
+| inside the original 95% CI | **32 / 36** | 32 / 36 |
+| verdicts identical | 36 / 36 | 36 / 36 |
+| max / RMS \|diff\| (original SEs) | **2.57 / 1.23** | 6.66 / 1.75 |
+| regard terms inside CI | **18 / 18** | 18 / 18 |
+| toxicity terms inside CI | **14 / 18** | 14 / 18 |
+| greedy exact text match | **1.000** | 0.112 |
+| sampled exact text match | 0.296 | 0.0003 |
+| *exploratory, post-hoc:* no-lexicon, inside CI | 34 / 36 | 36 / 36 |
+
+### Generation is exactly reproducible on the same hardware
+
+- **Greedy: 864 of 864 responses identical, byte for byte.**
+- **Sampled: exactly 128 of 432 per seed for both models.** The 432-prompt rerun file forms 54
+  batches of 8; **16 of them contain exactly the same eight prompts as a batch of the original
+  2,970-prompt run**, and those 16 × 8 = 128 prompts are precisely the identical responses (verified
+  directly). The backend re-seeds per batch, and padding shape depends on the batch's neighbours,
+  so a different batch composition gives a different sample. Where the computation is the same, the
+  output is the same.
+- So the lab rerun is ~30% an exact re-execution and ~70% a fresh sample from the same prompts.
+  It measures sampling variability, not hardware.
+
+### Where the failures are
+
+All four lab misses are **toxicity** (three Llama, one Mistral), with absolute shifts of 0.02–0.06 SD
+against original SEs of 0.011–0.027. Every regard term reproduced on both machines. Removing the
+lexicon (post-hoc) recovers two of the four in the lab, so in the lab the lexicon is part of it but
+not all: toxic_bert's own rare high scores move too.
+
+### What the two runs show together
+
+- **Hardware is not the explanation.** The same GPU fails the same count. The Kaggle misses were
+  larger (6.66 vs 2.57 SE) because of the four lexicon hits; without them Kaggle reproduces 36/36.
+- **Regard reproduces at its reported precision on both machines (18/18 and 18/18); toxicity does
+  not (14/18 and 14/18).** Both models' toxicity scores sit near the floor with rare spikes, so the
+  estimate depends on where a handful of high-scoring responses land, and a fresh sample moves it by
+  more than its narrow CI allows. The reported toxicity intervals therefore understate rerun
+  variability. That is a third, independent instance of the paper's theme: on these models,
+  **toxicity is not a measurement the standard instruments can make precisely.** It is already
+  descriptive-only under the drift rule.
+- **A note on the rule itself, stated plainly.** "All 36 inside the original CI" is strict: when a
+  rerun is mostly a fresh sample, some terms can fall outside a 95% interval with nothing wrong.
+  That strictness was not quantified when the rule was fixed (16 Oct 2026). The verdicts stand as
+  pre-registered; the paper should report the per-harm-type split above, not only the pass/fail.

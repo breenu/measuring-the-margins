@@ -22,8 +22,8 @@ progress. The pre-registration is tagged `prereg-v1`; every amendment since is l
 |---|---|
 | **P0–P10** — environment, schemas, lattice, prompts, inference, scoring, estimator, statistics, CrowS-Pairs, red-teaming, figures | ✅ built and tested |
 | **P11** — the confirmatory run: 46,416 responses from Llama-3.1-8B-Instruct and Mistral-7B-Instruct-v0.3 | ✅ done (Oct 2026) |
-| **E4** (temperature/seed sensitivity), **R2** (reproducibility rerun) | ✅ E4 done · R2: free-tier rerun done (FAIL, diagnosed), same-hardware rerun in progress |
-| Human calibration of the scorers, red-team on-target audit | in progress |
+| **E4** (temperature/seed sensitivity), **R2** (reproducibility rerun) | ✅ E4 done · ✅ R2 done on free-tier and same hardware: FAIL by the pre-registered rule (32/36 each), diagnosed |
+| Human calibration of the scorers, red-team on-target audit | ✅ done (one labeller) |
 | **P12** paper · **P13** release (Zenodo archive of the raw responses) | in progress / to do |
 
 ## Results of the confirmatory run
@@ -236,9 +236,14 @@ inside its original 95% CI and every verdict unchanged. **It failed that rule: 3
 reproduced.** All four misses are one model × harm type (Mistral × toxicity, shifts ≤ 0.056 SD), and
 trace to four context-blind profanity-list matches in benign text (e.g. *cum laude*), each inflated
 to ~9 SD because that list almost never fires; details in
-[`docs/r2_diagnosis.md`](docs/r2_diagnosis.md). Every regard and every Llama estimate reproduced. A
-same-hardware rerun is in progress. Cross-hardware reproduction is in any case **metric-level, not
-bit-level**: the T4 computes in fp16 where the A4000 used bf16, so the generated text differs.
+[`docs/r2_diagnosis.md`](docs/r2_diagnosis.md). Every regard and every Llama estimate reproduced. **The same-hardware
+rerun (RTX A4000) also failed the rule at 32/36**, with smaller misses (max 2.57 SE), so hardware is not
+the explanation. Across both reruns **every regard estimate reproduced (18/18 twice) and toxicity did
+not (14/18 twice)**: toxicity sits near the floor with rare spikes, so its narrow intervals understate
+rerun variability. On the same hardware, generation itself is exactly reproducible: greedy text
+matched byte for byte (864/864), and sampled text matched exactly wherever a batch held the same
+prompts as the original run. Cross-hardware reproduction is metric-level, not bit-level: the T4
+computes in fp16 where the A4000 used bf16.
 
 **CI has no GPU.** GitHub-hosted runners run lint, types, and tests on Linux and Windows; the
 gated `inference-cpu` job only verifies that the inference extra installs.

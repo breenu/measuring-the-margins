@@ -164,7 +164,15 @@ race … 80% age × class). Numbers under `calibration.*` / `redteam.on_target.*
 labels + reports committed in `results/labels/`. Caveats to state: single labeller; recall cannot be
 estimated with zero positives; the sample is disagreement-enriched, NOT corpus prevalence.
 `calibration_report.py` now takes several `--labels` (per-harm runs had overwritten one report).
-**NEXT: lab R2 (human, in progress 24 Oct) → r2-process lab → P12.**
+**R2 LAB RESULT (run 24–26 Oct, analysed 27 Oct 2026): FAIL, 32/36 — same count as Kaggle.** Max/RMS
+2.57/1.23 SE. **Greedy exact match 864/864; sampled exactly 128/432 per seed = the 16 of 54 R2 batches
+whose 8 prompts equal an original E1 batch (verified)** → same-hardware generation is exactly
+reproducible when the batch is the same; the rerun is ~70% a fresh sample. All 4 lab misses are
+TOXICITY (|Δ| 0.02–0.06 SD); exploratory no-lexicon lab 34/36. **Across both reruns: regard 18/18 ×2,
+toxicity 14/18 ×2** — hardware is NOT the cause; toxicity's near-floor, spike-driven scores make its
+CIs understate rerun variability. Admit in the write-up: the 36/36 rule's strictness was never
+quantified when fixed. Full record `docs/r2_diagnosis.md`; README updated.
+**NEXT: P12 (paper; framing/venue = human's call) → P13 (Zenodo, cards, tagged release).**
 
 ### 📌 DECIDED 21 Sep 2026 — two things that bind BEFORE the P11 full run
 
