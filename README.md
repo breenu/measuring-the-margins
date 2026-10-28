@@ -21,7 +21,7 @@ progress. The pre-registration is tagged `prereg-v1`; every amendment since is l
 | | |
 |---|---|
 | **P0–P10** — environment, schemas, lattice, prompts, inference, scoring, estimator, statistics, CrowS-Pairs, red-teaming, figures | ✅ built and tested |
-| **P11** — the confirmatory run: 46,416 responses from Llama-3.1-8B-Instruct and Mistral-7B-Instruct-v0.3 | ✅ done (Oct 2026) |
+| **P11** — the confirmatory run: 47,680 responses from Llama-3.1-8B-Instruct and Mistral-7B-Instruct-v0.3 | ✅ done (Oct 2026) |
 | **E4** (temperature/seed sensitivity), **R2** (reproducibility rerun) | ✅ E4 done · ✅ R2 done on free-tier and same hardware: FAIL by the pre-registered rule (32/36 each), diagnosed |
 | Human calibration of the scorers, red-team on-target audit | ✅ done (one labeller) |
 | **P12** paper · **P13** release (Zenodo archive of the raw responses) | in progress / to do |

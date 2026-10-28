@@ -56,7 +56,7 @@ decisions below are now built in: the smoke run is `run_p11.py smoke` and MUST P
 red-team arm is a descriptive `--max-frames` subset.
 
 **P11 LAB RUN ✅ GENERATION + `process` DONE 12–15 Oct 2026** on an **RTX A4000 16 GB** (driver 580,
-torch 2.14+cu130, bitsandbytes 0.50.2), a shared teaching-lab desktop. Smoke PASS; then **46,416
+torch 2.14+cu130, bitsandbytes 0.50.2), a shared teaching-lab desktop. Smoke PASS; then **47,680
 responses**: E1 11,880 × 2, CrowS 1,352 × 2, E4 t1.0 1,296 × 2 + greedy 432 × 2, red-team elicit
 1,440 (→ 6,358 frames, 51 used = 8,160 audit prompts) + audit 8,160 × 2. Measured ~2.8–4 s/gen at
 batch 8 (≈1,000–1,300/h), ~40 GPU-h total. Two student shutdowns, both resumed with no loss.
