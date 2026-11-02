@@ -20,17 +20,18 @@ cannot enter the repo.
 | `fig4_cross_paradigm` | **RQ1, scoped.** Generation and extraction compared at the single-axis level, plus the structural finding that a sentence-pair benchmark cannot populate an order-2 cell. The extractive interaction slot carries a reason, never a zero. | tables + measured CrowS counts |
 | `fig5_redteam_vs_static` | **RQ3, exploratory.** The two arms' interaction vectors and the cells red-teaming surfaces. Descriptive by pre-registered budget decision: no p, no q. | result tables |
 | `fig6_sensitivity` | **RQ4.** The headline interaction across the temperature grid and seed groups. | result tables |
-| `fig7_frame_breakdown` | **Precision.** Frames are item clusters, and the spread across them is what bounds the design's precision. `first_person` is flagged by the P4a phrase review. | result tables |
+| `fig7_frame_breakdown` | **Precision.** Frames are item clusters, and the spread across them is what bounds the design's precision. `first_person` is marked because it was declared a known risk in `configs/prompts/open_gen_v1.yaml` when the frame set was fixed, not because of what it scored. | result tables |
 
 ## Which figures show real data right now
 
-`fig3_field_underpowered` only. Its numbers are the measured intraclass correlation and the power
-simulation, read by key from `results/paper_numbers.json`.
+**All seven.** `fig3_field_underpowered` reads the measured intraclass correlation and the power
+simulation by key from `results/paper_numbers.json`; the other six draw the real result tables in
+`results/tables/`, written by the P11 confirmatory run (`scripts/run_p11.py process`,
+`e4-process`). Every table row carries `data_status`, and every one of them reads `real`.
 
-**Every other figure currently draws synthetic fixture rows** from `results/fixtures/` and carries
-a visible banner saying so. The confirmatory run is P11; `scripts/build_result_tables.py` then
-writes the same table names into `results/tables/`, `scripts/make_figures.py` prefers that
-directory automatically, and **no figure code changes**.
+`scripts/make_figures.py` prefers `results/tables/` and falls back to the synthetic rows in
+`results/fixtures/` **per table** only when a real table is missing; a figure drawn from fixture
+rows carries a visible banner saying so. An explicit `--table-dir` never falls back.
 
 ## The rules these figures are built under
 
