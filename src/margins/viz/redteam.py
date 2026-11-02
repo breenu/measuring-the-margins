@@ -154,7 +154,9 @@ def _vector_scatter(
     label = ax.text(
         -limit.value * 0.95,
         limit.value * 0.86,
-        "above the diagonal:\nred-teaming surfaces more",
+        # Neutral: "above the diagonal" means a larger red-team estimate, which for a negative
+        # gamma is a SMALLER interaction, so a directional gloss would misread half the plot.
+        "dotted line: equal\nin both arms",
         fontsize=6.0,
         color=INK,
         va="top",
@@ -316,7 +318,7 @@ def build(source: NumberSource, *, model_id: str) -> FigureSpec:
         y=-0.16,
     )
     figure.suptitle(
-        "Red-teaming reaches cells the static set does not — reported descriptively",
+        "Red-team and static interaction vectors — reported descriptively",
         x=0.02,
         ha="left",
         fontweight="bold",

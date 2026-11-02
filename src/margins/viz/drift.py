@@ -146,6 +146,7 @@ def _ratio_bars(
     keys = sorted({(row["harm_type"], row["scorer_id"]) for row in table.rows})
     downgraded = {row["harm_type"] for row in decisions.rows if row["descriptive_only"] == "true"}
     positions = np.arange(len(keys))
+    top = threshold
     for position, (harm, scorer) in zip(positions, keys, strict=True):
         subset = table.where(harm_type=harm, scorer_id=scorer)
         ratios = source.floats(subset, "ratio")
@@ -156,6 +157,7 @@ def _ratio_bars(
             how="largest drift_rms / model_rms over the pair x control-family grid",
         )
         over = worst.value >= threshold
+        top = max(top, worst.value)
         ax.barh(
             position,
             worst.value,
@@ -203,7 +205,9 @@ def _ratio_bars(
         fontsize=6.0,
         color=INK,
     ).set_gid(None)
-    ax.set_xlim(0.0, 1.0)
+    # Sized to the largest ratio drawn: a fixed 0-1 axis clipped every over-threshold bar, and the
+    # real ratios run to ~11. The threshold stays marked by its rule and label.
+    ax.set_xlim(0.0, max(1.0, 1.05 * top))
     for harm in sorted(downgraded):
         rows = [index for index, key in enumerate(keys) if key[0] == harm]
         band = ax.axhspan(min(rows) - 0.5, max(rows) + 0.5, color=MUTED, alpha=0.10, zorder=0)

@@ -10,7 +10,8 @@ matters and how it is checked):
 * inter-scorer agreement per model x harm type (``agreement.csv`` from ``run_scoring.py``);
 * the standardization constants, re-derived and verified against the stored standardized scores;
 * the red-team funnel, including the frame cap the audit prompts were built under;
-* response counts per arm and model, from the response files the generation manifests name.
+* response counts per arm and model, from the response files the generation manifests name;
+* the R2 lexicon hits per rerun, standardized through the original run's constants.
 
 It also registers a GPU-hour ESTIMATE from logged throughput, labelled as an estimate.
 
@@ -33,6 +34,7 @@ from margins.report.run_numbers import (
     Provenance,
     agreement_numbers,
     gpu_hour_numbers,
+    lexicon_hit_numbers,
     redteam_funnel_numbers,
     response_count_numbers,
     scale_numbers,
@@ -51,6 +53,7 @@ from margins.scoring.standardize import signs_from_specs
 from margins.stats.numbers import PAPER_NUMBERS_PATH, read_paper_numbers, write_paper_numbers
 
 MODELS = ("llama31_8b_instruct", "mistral7b_instruct_v03")
+LEXICON = "ldnoobw_lexicon"
 SCRIPT = "scripts/emit_run_numbers.py"
 
 #: (directory under data/responses, key segment, generated text?) for the P11 lab run and R2.
@@ -140,6 +143,7 @@ def main(argv: list[str] | None = None) -> int:
     manifests = Manifests(args.manifests)
     signs = signs_from_specs(load_scoring_config(args.scoring).scorers)
     entries = []
+    e1_constants: dict[str, dict[tuple[str, str], tuple[float, float]]] = {}
 
     # --- agreement + standardization constants -------------------------------------------
     for model in MODELS:
@@ -169,6 +173,7 @@ def main(argv: list[str] | None = None) -> int:
             run_id, f"{SCRIPT}: standardization constants of e1/{model}, verified"
         )
         entries += scale_numbers(constants, arm="e1", model_name=model, where=where)
+        e1_constants[model] = constants
 
     # --- the red-team funnel ---------------------------------------------------------------
     frames_run = manifests.unique("build-redteam-frames-")
@@ -200,6 +205,39 @@ def main(argv: list[str] | None = None) -> int:
     entries += response_count_numbers(p11, prefix="p11")
     entries += response_count_numbers(_response_counts(args.data, manifests, R2_ARMS), prefix="r2")
 
+    # --- R2: lexicon hits, on the original scale ----------------------------------------------
+    for model in MODELS:
+        e1_run = manifests.unique(f"scoring-e1-{model}-")
+        original = [
+            s
+            for s in read_scores(args.data / "scoring" / "e1" / model / SCORES_FILENAME)
+            if s.scorer_id == LEXICON and s.condition == "model"
+        ]
+        mean, sd = e1_constants[model][(LEXICON, "model")]
+        for machine in ("kaggle", "lab"):
+            arm = f"r2_{machine}_sampled"
+            rerun = [
+                s
+                for s in read_scores(args.data / "scoring" / arm / model / SCORES_FILENAME)
+                if s.scorer_id == LEXICON
+            ]
+            cells = {s.cell_id for s in rerun}
+            entries += lexicon_hit_numbers(
+                [s.raw for s in rerun],
+                [s.raw for s in original if s.cell_id in cells],
+                mean=mean,
+                sd=sd,
+                sign=signs[LEXICON],
+                machine=machine,
+                model_name=model,
+                rerun_where=manifests.provenance(
+                    manifests.unique(f"scoring-{arm}-{model}-"), f"{SCRIPT}: {arm}/{model} scores"
+                ),
+                original_where=manifests.provenance(
+                    e1_run, f"{SCRIPT}: e1/{model} scores, R2 cells"
+                ),
+            )
+
     # --- GPU-hours, an ESTIMATE ------------------------------------------------------------
     rates = {
         model: seconds_per_generation(
@@ -226,7 +264,9 @@ def main(argv: list[str] | None = None) -> int:
     write_paper_numbers(numbers, args.out)
     print(f"registered {len(entries)} numbers -> {args.out} ({len(numbers.numbers)} keys)")
     for entry in entries:
-        if entry.key.startswith(("agreement.", "compute.", "redteam.funnel.", "responses.p11.")):
+        if entry.key.startswith(
+            ("agreement.", "compute.", "redteam.funnel.", "responses.p11.", "r2.lexicon.")
+        ):
             print(f"  {entry.key:<62} {entry.value}")
     return 0
 

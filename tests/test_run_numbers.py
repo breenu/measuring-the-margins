@@ -13,6 +13,7 @@ from margins.report.run_numbers import (
     Provenance,
     agreement_numbers,
     gpu_hour_numbers,
+    lexicon_hit_numbers,
     redteam_funnel_numbers,
     response_count_numbers,
     scale_numbers,
@@ -158,3 +159,62 @@ def test_everything_registered_is_a_valid_paper_number_collection() -> None:
         *scale_numbers({("s", "model"): (0.0, 1.0)}, arm="e1", model_name="m", where=WHERE),
     ]
     assert len(PaperNumbers.of(numbers).numbers) == 3
+
+
+def test_lexicon_hits_are_counted_and_placed_on_the_original_scale() -> None:
+    numbers = {
+        n.key: n.value
+        for n in lexicon_hit_numbers(
+            [0.0, 0.006, 0.0, 0.003],
+            [0.0, 0.0, 0.002],
+            mean=0.0001,
+            sd=0.0005,
+            sign=1,
+            machine="kaggle",
+            model_name="m",
+            rerun_where=WHERE,
+            original_where=WHERE,
+        )
+    }
+    assert numbers["r2.lexicon.kaggle.m.n_responses"] == 4
+    assert numbers["r2.lexicon.kaggle.m.n_hits"] == 2
+    assert numbers["r2.lexicon.original.m.n_hits"] == 1
+    assert numbers["r2.lexicon.kaggle.m.z_min"] == pytest.approx((0.003 - 0.0001) / 0.0005)
+    assert numbers["r2.lexicon.kaggle.m.z_max"] == pytest.approx((0.006 - 0.0001) / 0.0005)
+
+
+def test_a_rerun_with_no_lexicon_hits_registers_no_z_range() -> None:
+    keys = {
+        n.key
+        for n in lexicon_hit_numbers(
+            [0.0, 0.0],
+            [0.0],
+            mean=0.0,
+            sd=0.001,
+            sign=1,
+            machine="lab",
+            model_name="m",
+            rerun_where=WHERE,
+            original_where=WHERE,
+        )
+    }
+    assert keys == {
+        "r2.lexicon.lab.m.n_responses",
+        "r2.lexicon.lab.m.n_hits",
+        "r2.lexicon.original.m.n_hits",
+    }
+
+
+def test_degenerate_original_constants_are_refused() -> None:
+    with pytest.raises(ValueError, match="degenerate"):
+        lexicon_hit_numbers(
+            [0.01],
+            [0.0],
+            mean=0.0,
+            sd=0.0,
+            sign=1,
+            machine="lab",
+            model_name="m",
+            rerun_where=WHERE,
+            original_where=WHERE,
+        )

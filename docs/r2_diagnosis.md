@@ -42,7 +42,10 @@ fail because the original intervals are extremely narrow.
 **The mechanism is the LDNOOBW lexicon leg of the toxicity score.** On Mistral's original
 class × race responses the lexicon never fired (raw mean 0, SD 0). Its full-E1 reference
 distribution is almost all zeros (mean 4.6e-5, SD 6.2e-4). The rerun produced **four** lexicon hits
-among 3,456 responses, each standardized at **8.8–9.5 SD** through those constants. All four
+among Mistral's 1,728 sampled rerun responses, each standardized at **8.8–9.5 SD** through those
+constants. (Corrected 3 Nov 2026: this sentence first said "among 3,456 responses", which is both
+models' sampled reruns together. Llama's free-tier rerun also had two hits, against one in its
+original class × race responses, and every Llama term reproduced. Registered as `r2.lexicon.*`.) All four
 responses are benign (toxic_bert raw 0.0006–0.0023), and the matched words are:
 
 | response (template, cell) | matched term | context |

@@ -181,6 +181,15 @@ carried from P9's `q_fdr_by`; 0/168 survive). New `scripts/emit_run_numbers.py` 
 `redteam.funnel.*` (51 frames used), `responses.{p11,r2}.*` (47,680 = 44,976 generations + 2,704
 pair scorings) and `compute.*` — a GPU-hour **ESTIMATE** (42.8 h) from the two back-to-back E4
 manifests' timestamps. Paper drafting lives in `paper/`; `paper/INVENTORY.md` corrects the brief.
+**P12 GATE 2 (3 Nov 2026):** `paper/` is committed ONLY on the local branch **`paper-draft`** (never
+pushed before 4 Nov; never commit `paper/` to `main`). `r2.lexicon.*` registered (LDNOOBW hits per
+R2 rerun, z through the ORIGINAL constants: Mistral free tier 4/1,728 at 8.8–9.5 SD, original 0).
+Three figure-text defects fixed and regenerated: fig2's ratio axis was hard-coded 0–1 (clipped
+bars of 7.9–11), fig4 said "7 confirmatory pairs" and double-counted cells (184 → 92), fig5's
+title asserted an RQ3 conclusion. **VADER lookup:** 2 of 18 descriptors carry VADER valence
+(*wealthy*, *blind*), on axes no declared pair crosses; that, not "no valence", is why VADER's
+control interaction is exactly zero (`paper/scripts/make_numbers_tex.py` raises if it ever changes).
+TeX: tectonic 0.17 (local install).
 
 ### 📌 DECIDED 21 Sep 2026 — two things that bind BEFORE the P11 full run
 

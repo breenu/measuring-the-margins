@@ -16,6 +16,10 @@ gitignored ``data/`` tree, which the anonymous review mirror does not carry:
   built under (``--max-frames``, chosen by ``run_p11.py budget``).
 * **Response counts** per arm and model, each tied to the generation manifest that wrote them.
 
+Also the R2 lexicon hits (P12, Gate 1 decision G4): how often the LDNOOBW leg fired in each R2
+rerun, and where each hit lands on the original run's scale. ``docs/r2_diagnosis.md`` computed
+these by hand; registering them lets the paper cite them by key.
+
 Plus one ESTIMATE, labelled as one: GPU-hours from logged throughput. No manifest records a
 duration, but every manifest records when its stage started. Within one ``run_p11.py e4`` command
 the ``t10`` arm is followed immediately by the ``greedy`` arm (the orchestrator runs them in
@@ -43,6 +47,7 @@ __all__ = [
     "Provenance",
     "agreement_numbers",
     "gpu_hour_numbers",
+    "lexicon_hit_numbers",
     "redteam_funnel_numbers",
     "response_count_numbers",
     "scale_numbers",
@@ -157,6 +162,57 @@ def scale_numbers(
         base = f"scale.{arm}.{model_name}.{scorer}.{condition}"
         out.append(_number(f"{base}.raw_mean", mean, "none", where, note))
         out.append(_number(f"{base}.raw_sd", sd, "none", where, note))
+    return out
+
+
+# --------------------------------------------------------------------------------------
+# R2: the lexicon hits behind the free-tier failure
+# --------------------------------------------------------------------------------------
+
+
+def lexicon_hit_numbers(
+    rerun_raw: Sequence[float],
+    original_raw: Sequence[float],
+    *,
+    mean: float,
+    sd: float,
+    sign: int,
+    machine: str,
+    model_name: str,
+    rerun_where: Provenance,
+    original_where: Provenance,
+) -> list[PaperNumber]:
+    """How often the lexicon fired in an R2 rerun, and how far each hit sits on the ORIGINAL scale.
+
+    ``mean``/``sd`` are the original run's standardization constants (the ones the R2 comparison
+    maps the rerun through); ``original_raw`` is the original run restricted to the rerun's cells,
+    so the two hit counts compare like with like. A hit is any non-zero raw score.
+    """
+    if sd <= 0.0:
+        raise ValueError("the original constants are degenerate; a hit has no finite z-score")
+    rerun = np.asarray(rerun_raw, dtype=float)
+    original = np.asarray(original_raw, dtype=float)
+    hits = rerun[rerun != 0.0]
+    base = f"r2.lexicon.{machine}.{model_name}"
+    note = (
+        "LDNOOBW lexicon leg of toxicity in the R2 sampled rerun; a hit is a non-zero raw score. "
+        "z-scores are through the ORIGINAL run's constants, as the R2 comparison standardizes."
+    )
+    out = [
+        _number(f"{base}.n_responses", int(rerun.size), "count", rerun_where, note),
+        _number(f"{base}.n_hits", int(hits.size), "count", rerun_where, note),
+        _number(
+            f"r2.lexicon.original.{model_name}.n_hits",
+            int(np.count_nonzero(original)),
+            "count",
+            original_where,
+            "LDNOOBW hits in the original E1 responses of the cells R2 reruns.",
+        ),
+    ]
+    if hits.size:
+        z = sign * (hits - mean) / sd
+        out.append(_number(f"{base}.z_min", float(z.min()), "sd", rerun_where, note))
+        out.append(_number(f"{base}.z_max", float(z.max()), "sd", rerun_where, note))
     return out
 
 

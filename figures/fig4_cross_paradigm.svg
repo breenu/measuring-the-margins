@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="532.776522pt" height="333.555254pt" viewBox="0 0 532.776522 333.555254" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="528.704522pt" height="333.555254pt" viewBox="0 0 528.704522 333.555254" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
@@ -21,8 +21,8 @@
  <g id="figure_1">
   <g id="patch_1">
    <path d="M 0 333.555254 
-L 532.776522 333.555254 
-L 532.776522 0 
+L 528.704522 333.555254 
+L 528.704522 0 
 L 0 0 
 z
 " style="fill: #ffffff"/>
@@ -896,8 +896,8 @@ z
     <text style="font-weight: 700; font-size: 8px; font-family: 'DejaVu Sans'; fill: #26282b" transform="translate(330.116522 214.387063)">NOT ESTIMABLE</text>
    </g>
    <g id="text_35">
-    <text style="font-size: 6.4px; font-family: 'DejaVu Sans'; fill: #26282b" transform="translate(330.116522 231.121117)">All 7 confirmatory pairs, both reductions.</text>
-    <text style="font-size: 6.4px; font-family: 'DejaVu Sans'; fill: #26282b" transform="translate(330.116522 238.802867)">184 order-2 cells to fill; 3 items in the whole source attest one.</text>
+    <text style="font-size: 6.4px; font-family: 'DejaVu Sans'; fill: #26282b" transform="translate(330.116522 231.121117)">All 7 declared pairs, both models, both reductions.</text>
+    <text style="font-size: 6.4px; font-family: 'DejaVu Sans'; fill: #26282b" transform="translate(330.116522 238.802867)">92 order-2 cells to fill; 3 items in the whole source attest one.</text>
     <text style="font-size: 6.4px; font-family: 'DejaVu Sans'; fill: #26282b" transform="translate(330.116522 246.484617)">The estimator needs every cell of a pair's grid non-empty,</text>
     <text style="font-size: 6.4px; font-family: 'DejaVu Sans'; fill: #26282b" transform="translate(330.116522 254.166367)">so it reports a reason rather than a number.</text>
     <text style="font-size: 6.4px; font-family: 'DejaVu Sans'; fill: #26282b" transform="translate(330.116522 261.847617)"/>

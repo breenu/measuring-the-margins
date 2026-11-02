@@ -179,14 +179,19 @@ def _not_estimable(ax: Axes, source: NumberSource, reports: ResultTable) -> None
         len(pair_set),
         key="extractive_pairs_attempted",
         origin=extractive.origin,
-        how="distinct confirmatory axis pairs the extractive source was fitted for",
+        how="distinct declared axis pairs the extractive source was fitted for",
     )
-    cells = source.floats(extractive.where(harm_type=extractive.strings("harm_type")[0]), "n_cells")
+    # One model's rows: every model is fitted over the same grid, so summing across models would
+    # count each cell once per model.
+    one_model = extractive.where(
+        harm_type=extractive.strings("harm_type")[0], model_id=extractive.strings("model_id")[0]
+    )
+    cells = source.floats(one_model, "n_cells")
     total = source.derived(
         sum(value.value for value in cells),
         key="extractive_grid_cells",
         origin=extractive.origin,
-        how="order-2 cells across the confirmatory pairs the extractive source was asked to fill",
+        how="order-2 cells across the declared pairs, for one model (every model has one grid)",
     )
     attested = source.number("crows.order_2_items")
 
@@ -207,7 +212,7 @@ def _not_estimable(ax: Axes, source: NumberSource, reports: ResultTable) -> None
     detail = ax.text(
         0.0,
         0.52,
-        f"All {pairs.value:.0f} confirmatory pairs, both reductions.\n"
+        f"All {pairs.value:.0f} declared pairs, both models, both reductions.\n"
         f"{total.value:.0f} order-2 cells to fill; {attested.value:.0f} items in the whole "
         "source attest one.\n"
         "The estimator needs every cell of a pair's grid non-empty,\n"
