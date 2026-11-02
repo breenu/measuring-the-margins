@@ -13,6 +13,7 @@ from margins.report.run_numbers import (
     Provenance,
     agreement_numbers,
     gpu_hour_numbers,
+    largest_coefficient_numbers,
     lexicon_hit_numbers,
     redteam_funnel_numbers,
     response_count_numbers,
@@ -218,3 +219,38 @@ def test_degenerate_original_constants_are_refused() -> None:
             rerun_where=WHERE,
             original_where=WHERE,
         )
+
+
+def _effect_row(
+    term: str, estimate: float, kind: str = "interaction", member: str = "false"
+) -> dict[str, str]:
+    return {
+        "term": term,
+        "kind": kind,
+        "estimate": str(estimate),
+        "ci_low": str(estimate - 0.1),
+        "ci_high": str(estimate + 0.1),
+        "family_member": member,
+        "axis_a": "a",
+        "axis_b": "b",
+    }
+
+
+def test_the_largest_coefficient_includes_dependent_ones_and_ignores_main_effects() -> None:
+    rows = [
+        _effect_row("a=1:b=1", 0.2, member="true"),
+        _effect_row("a=2:b=2", -0.5),
+        _effect_row("a=1", 0.9, kind="main_a"),
+    ]
+    numbers = {
+        n.key: n
+        for n in largest_coefficient_numbers(
+            rows, scope="s", model_name="m", harm_type="h", where=WHERE
+        )
+    }
+    top = numbers["gamma.largest.s.m.h.estimate"]
+    assert top.value == pytest.approx(-0.5)
+    assert (top.ci_low, top.ci_high) == (pytest.approx(-0.6), pytest.approx(-0.4))
+    assert "dependent coefficient" in (top.note or "")
+    assert numbers["gamma.largest.s.m.h.n_coefficients"].value == 2
+    assert numbers["gamma.largest.s.m.h.n_within_0_15"].value == 0

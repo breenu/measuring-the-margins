@@ -29,11 +29,14 @@ from pathlib import Path
 from typing import Any
 
 from margins.inference.harness import read_responses
+from margins.inference.models import load_model_config
+from margins.lattice.config import DEFAULT_LATTICE, load_lattice_config
 from margins.report.run_numbers import (
     GenerationCount,
     Provenance,
     agreement_numbers,
     gpu_hour_numbers,
+    largest_coefficient_numbers,
     lexicon_hit_numbers,
     redteam_funnel_numbers,
     response_count_numbers,
@@ -136,6 +139,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, default=Path("data"))
     parser.add_argument("--manifests", type=Path, default=Path("results") / "run_manifests")
+    parser.add_argument("--tables", type=Path, default=Path("results") / "tables")
     parser.add_argument("--scoring", default=DEFAULT_SCORING)
     parser.add_argument("--out", type=Path, default=PAPER_NUMBERS_PATH)
     args = parser.parse_args(argv)
@@ -205,6 +209,28 @@ def main(argv: list[str] | None = None) -> int:
     entries += response_count_numbers(p11, prefix="p11")
     entries += response_count_numbers(_response_counts(args.data, manifests, R2_ARMS), prefix="r2")
 
+    # --- the largest emitted interaction coefficient, dependent ones included ----------------
+    # Read from the COMMITTED result table (written from the stats run), so the anonymous mirror
+    # can check it. Two scopes: the confirmatory pairs the family covers, and every declared pair.
+    exploratory = {
+        p.axes for p in load_lattice_config(DEFAULT_LATTICE).pairs if p.status == "exploratory"
+    }
+    table = args.tables / "emergence_effects.csv"
+    with table.open(encoding="utf-8", newline="") as fh:
+        effects = [row for row in csv.DictReader(fh) if row["benchmark"] == "open_gen_templates"]
+    stats_where = manifests.provenance(
+        manifests.unique("stats-e1-"), f"{SCRIPT}: {table.as_posix()} interaction rows"
+    )
+    for model in MODELS:
+        model_id = load_model_config(model).model_id
+        for harm in sorted({row["harm_type"] for row in effects}):
+            rows = [r for r in effects if r["model_id"] == model_id and r["harm_type"] == harm]
+            confirmatory = [r for r in rows if (r["axis_a"], r["axis_b"]) not in exploratory]
+            for scope, subset in (("confirmatory_pairs", confirmatory), ("all_pairs", rows)):
+                entries += largest_coefficient_numbers(
+                    subset, scope=scope, model_name=model, harm_type=harm, where=stats_where
+                )
+
     # --- R2: lexicon hits, on the original scale ----------------------------------------------
     for model in MODELS:
         e1_run = manifests.unique(f"scoring-e1-{model}-")
@@ -265,7 +291,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"registered {len(entries)} numbers -> {args.out} ({len(numbers.numbers)} keys)")
     for entry in entries:
         if entry.key.startswith(
-            ("agreement.", "compute.", "redteam.funnel.", "responses.p11.", "r2.lexicon.")
+            ("agreement.", "compute.", "redteam.funnel.", "responses.p11.", "gamma.")
         ):
             print(f"  {entry.key:<62} {entry.value}")
     return 0

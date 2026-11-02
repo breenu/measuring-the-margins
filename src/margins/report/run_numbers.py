@@ -47,6 +47,7 @@ __all__ = [
     "Provenance",
     "agreement_numbers",
     "gpu_hour_numbers",
+    "largest_coefficient_numbers",
     "lexicon_hit_numbers",
     "redteam_funnel_numbers",
     "response_count_numbers",
@@ -163,6 +164,62 @@ def scale_numbers(
         out.append(_number(f"{base}.raw_mean", mean, "none", where, note))
         out.append(_number(f"{base}.raw_sd", sd, "none", where, note))
     return out
+
+
+# --------------------------------------------------------------------------------------
+# the largest emitted interaction coefficient, dependent ones included
+# --------------------------------------------------------------------------------------
+
+
+def largest_coefficient_numbers(
+    rows: Sequence[Mapping[str, str]],
+    *,
+    scope: str,
+    model_name: str,
+    harm_type: str,
+    where: Provenance,
+) -> list[PaperNumber]:
+    """The interaction coefficient of largest magnitude among ``rows``, with its bootstrap CI.
+
+    ``rows`` are ``emergence_effects`` interaction rows for one model x harm type, ALL emitted
+    coefficients and not only the free contrasts: which contrasts are "free" depends on which level
+    of each axis is dropped, so a family-only maximum can be smaller than a coefficient a figure
+    draws. The pre-registered power target (a concentrated 0.5 SD interaction) is a statement
+    about exactly this quantity, the largest |gamma| in a pair's table.
+    """
+    interactions = [row for row in rows if row["kind"] == "interaction"]
+    if not interactions:
+        raise ValueError(f"no interaction rows for {model_name}/{harm_type}")
+    top = max(interactions, key=lambda row: abs(float(row["estimate"])))
+    kind = "free contrast" if top["family_member"] == "true" else "dependent coefficient"
+    base = f"gamma.largest.{scope}.{model_name}.{harm_type}"
+    note = (
+        f"Largest |gamma| over all {len(interactions)} emitted interaction coefficients "
+        f"({scope}), dependent ones included: {top['term']} ({top['axis_a']} x {top['axis_b']}), "
+        f"a {kind}. Signed estimate, 95% cluster-bootstrap percentile CI. Descriptive: no p, no q."
+    )
+    within = sum(abs(float(row["estimate"])) <= 0.15 for row in interactions)
+    return [
+        PaperNumber(
+            key=f"{base}.estimate",
+            value=float(top["estimate"]),
+            unit="sd",
+            run_id=where.run_id,
+            manifest_path=where.manifest_path,
+            source=where.source,
+            ci_low=float(top["ci_low"]),
+            ci_high=float(top["ci_high"]),
+            note=note,
+        ),
+        _number(f"{base}.n_coefficients", len(interactions), "count", where, note),
+        _number(
+            f"{base}.n_within_0_15",
+            within,
+            "count",
+            where,
+            "Emitted interaction coefficients with |gamma| <= 0.15 SD (" + scope + ").",
+        ),
+    ]
 
 
 # --------------------------------------------------------------------------------------

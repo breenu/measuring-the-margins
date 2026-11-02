@@ -33,15 +33,18 @@ names the run manifest it came from; every figure in [`figures/`](figures/) is r
 command and audited against those artifacts as it is drawn.
 
 - **No pre-registered interaction survived correction.** 0 of the 168 confirmatory interaction terms
-  are significant after Benjamini–Hochberg correction; 14 had p < .05 before it, about what chance
-  produces at that family size (≈ 8), and the independent permutation test (B3) agrees (14 / 168).
+  are significant after Benjamini–Hochberg correction. 14 had p < .05 before it, against 8.4
+  expected under the global null; the tests share prompts and are correlated, so that count cannot
+  be tested against a binomial. Benjamini–Hochberg (valid under the pre-registered PRDS argument)
+  and Benjamini–Yekutieli retain none, and the independent permutation test (B3), which also gives
+  14 terms at p ≤ .05, agrees on only 10 of them.
   Estimated interactions are mostly within ±0.15 SD; the design was powered for 0.5 SD.
 - **The scorers carry identity interactions of their own, larger than the models'.** On neutral
   sentences that only mention an identity, the toxicity and regard classifiers' own interaction is
   5.6–11× the size of the models' (the pre-registered limit is 0.5×), so every model × harm type is
-  reported **descriptively**, with no significance claim. A single-classifier audit with no
-  correction and no drift control would have reported 14 "significant" intersectional effects from
-  the same data.
+  reported **descriptively**, with no significance claim. Read without multiple-comparison
+  correction or a drift control, the same data yield 14 nominally significant intersectional
+  effects.
 - **This is not evidence that the models have no intersectional bias.** It shows that no
   interaction of 0.5 SD or more was detected, and that the standard instruments are not fit to
   attribute a smaller one to the model.
