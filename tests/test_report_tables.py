@@ -194,6 +194,7 @@ def _claim(term: str) -> SignificanceClaim:
         ci_high=0.6,
         p=0.001,
         q=0.01,
+        q_fdr_by=0.0557,
         powered=True,
         status="claimable",
         claimable=True,
@@ -227,6 +228,8 @@ def test_the_row_builders_round_trip_real_records(tmp_path: Path) -> None:
     assert row["kind"] == "interaction"
     assert row["value_a"] == "young" and row["value_b"] == "blind"
     assert row["status"] == "claimable" and row["family_member"] == "true"
+    # BY is carried from P9's claim row, never recomputed by the table layer.
+    assert float(row["q_by"]) == pytest.approx(0.0557)
 
 
 def test_an_estimate_with_no_matching_fit_term_raises() -> None:
@@ -239,6 +242,7 @@ def test_a_term_the_stats_run_never_gated_gets_an_empty_status() -> None:
     """Empty says 'never gated'. Inventing a status would be the figure outvoting P9."""
     (row,) = emergence_rows([_effect(TERM)], [_fit_term(TERM, "interaction")], [], [])
     assert row["status"] == ""
+    assert row["q_by"] is None
     assert row["claimable"] is False
 
 

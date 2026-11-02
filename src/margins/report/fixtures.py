@@ -127,6 +127,12 @@ def _bh(p_values: Sequence[float]) -> list[float]:
     return q
 
 
+def _by_from_bh(q_bh: float, n: int) -> float:
+    """Benjamini-Yekutieli from a BH q: scaled by the harmonic number, capped at 1."""
+    harmonic = sum(1.0 / i for i in range(1, n + 1))
+    return round(min(1.0, q_bh * harmonic), 6)
+
+
 def _wald_p(estimate: float, se: float) -> float:
     from scipy import stats
 
@@ -235,6 +241,7 @@ def _emergence_rows(
                             "ci_high": high,
                             "p": _wald_p(estimate, se) if member else None,
                             "q": None,
+                            "q_by": None,
                             # Not simulated: a fixture p_permutation would be a number with no
                             # permutation behind it. The column is blank until a real run fills it.
                             "p_permutation": None,
@@ -277,6 +284,7 @@ def _emergence_rows(
                                 "ci_high": high,
                                 "p": None,
                                 "q": None,
+                                "q_by": None,
                                 "p_permutation": None,
                                 "family_size": None,
                                 "correction": None,
@@ -292,6 +300,7 @@ def _emergence_rows(
             if family:
                 for row, q in zip(family, _bh([float(r["p"]) for r in family]), strict=True):
                     row["q"] = q
+                    row["q_by"] = _by_from_bh(q, len(family))
                     # The three move together on the record, so they move together here.
                     row["family_size"] = len(family)
                     row["correction"] = "fdr_bh"

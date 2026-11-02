@@ -173,6 +173,14 @@ toxicity 14/18 ×2** — hardware is NOT the cause; toxicity's near-floor, spike
 CIs understate rerun variability. Admit in the write-up: the 36/36 rule's strictness was never
 quantified when fixed. Full record `docs/r2_diagnosis.md`; README updated.
 **NEXT: P12 (paper; framing/venue = human's call) → P13 (Zenodo, cards, tagged release).**
+**P12 REGISTRATION (2 Nov 2026):** quantities that lived only in gitignored `data/` are now in
+committed artifacts the anonymous mirror carries. `emergence_effects` gained **`q_by`** (BY,
+carried from P9's `q_fdr_by`; 0/168 survive). New `scripts/emit_run_numbers.py` +
+`margins.report.run_numbers` register `agreement.*` (Krippendorff α: regard 0.47/0.44, **toxicity
+−0.003/0.046**), `scale.*` (standardization constants, verified against stored z-scores),
+`redteam.funnel.*` (51 frames used), `responses.{p11,r2}.*` (47,680 = 44,976 generations + 2,704
+pair scorings) and `compute.*` — a GPU-hour **ESTIMATE** (42.8 h) from the two back-to-back E4
+manifests' timestamps. Paper drafting lives in `paper/`; `paper/INVENTORY.md` corrects the brief.
 
 ### 📌 DECIDED 21 Sep 2026 — two things that bind BEFORE the P11 full run
 

@@ -114,6 +114,9 @@ def emergence_rows(
                 "ci_high": effect.ci_high,
                 "p": effect.p,
                 "q": effect.q,
+                # BY, the sensitivity column P9 computed beside BH. Carried from the claim row,
+                # like p_permutation: the table layer computes no q of its own.
+                "q_by": claim.q_fdr_by if claim is not None else None,
                 # B3, beside the GLM p and never corrected. Carried from the claim row P9 wrote;
                 # empty for an effect the gate never saw (a descriptive arm) or a non-member term.
                 "p_permutation": claim.p_permutation if claim is not None else None,
