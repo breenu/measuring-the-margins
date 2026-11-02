@@ -195,8 +195,13 @@ max |γ| over ALL emitted interaction coefficients (dependent included): Llama r
 [0.22, 0.93] at low-income × white, a DEPENDENT coefficient of class × race (the free set drops
 low-income and Hispanic), drawn in fig1's heatmap. 0.27 was the max over the 168 FREE contrasts
 only. The power target was simulated as the CONCENTRATED pattern (max |γ| of a pair's table =
-0.5 SD), i.e. exactly this quantity. Wording of "largest is 0.27" / "no interaction ≥ 0.5 SD" is
-the human's decision. README "about what chance produces" replaced (P(X≥14|168,.05)=0.043).
+0.5 SD), i.e. exactly this quantity. README "about what chance produces" replaced
+(P(X≥14|168,.05)=0.043). **RESOLVED at Gate 3 (3 Nov):** the drift rule is harm-type-level, but
+drift is pair-level: the regard classifier is BELOW 0.5 on class × race (0.03–0.11), age × race and
+class × age; toxic_bert exceeds on all 7. Class × race carries the 0.571 coefficient, all 8 family
+terms with p < .01, and reproduced in R2. Written as EXPLORATORY ("a candidate for a confirmatory
+follow-up, not a finding; an interaction in what the regard scorer measures, not demonstrated
+harm"). RQ2 = "not measurable AS PRE-REGISTERED". Never write the drift as dominating every pair.
 
 ### 📌 DECIDED 21 Sep 2026 — two things that bind BEFORE the P11 full run
 
