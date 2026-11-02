@@ -38,16 +38,25 @@ command and audited against those artifacts as it is drawn.
   be tested against a binomial. Benjamini–Hochberg (valid under the pre-registered PRDS argument)
   and Benjamini–Yekutieli retain none, and the independent permutation test (B3), which also gives
   14 terms at p ≤ .05, agrees on only 10 of them.
-  Estimated interactions are mostly within ±0.15 SD; the design was powered for 0.5 SD.
-- **The scorers carry identity interactions of their own, larger than the models'.** On neutral
-  sentences that only mention an identity, the toxicity and regard classifiers' own interaction is
-  5.6–11× the size of the models' (the pre-registered limit is 0.5×), so every model × harm type is
-  reported **descriptively**, with no significance claim. Read without multiple-comparison
-  correction or a drift control, the same data yield 14 nominally significant intersectional
-  effects.
-- **This is not evidence that the models have no intersectional bias.** It shows that no
-  interaction of 0.5 SD or more was detected, and that the standard instruments are not fit to
-  attribute a smaller one to the model.
+- **On some axis pairs the scorers carry identity interactions of their own, larger than the
+  models'.** On neutral sentences that only mention an identity, the toxicity and regard
+  classifiers' own interaction reaches 5.6–11× the size of the models' (the pre-registered limit is
+  0.5×). The pre-registered drift rule operates on the harm type, so both harm types are reported
+  **descriptively**, with no significance claim, and the primary hypothesis is not measurable as
+  pre-registered. The drift is not uniform: the toxicity classifier exceeds the limit on all 7
+  declared pairs, the regard classifier on 4 of them. Read without multiple-comparison correction
+  or a drift control, the same data yield 14 nominally significant intersectional effects.
+- **Class × race (exploratory, descriptive).** On this pair the regard classifier's drift is small
+  (ratios 0.03–0.11), and the largest interaction coefficient in any of the family's pairs lies
+  there: +0.57 SD (Llama-3.1-8B, regard, low-income × white; 95% CI 0.22–0.93), a dependent
+  coefficient (which contrasts are "free" depends on the dropped levels; the largest free contrast
+  is 0.27 SD). Four of Llama's free regard contrasts on this pair have nominal p of .003–.009, and
+  none survives correction (q ≥ .18). This is a candidate for a confirmatory follow-up, not a
+  finding, and because the human calibration found no harmful responses, it is an interaction in
+  what the regard scorer measures, not demonstrated harm.
+- **This is not evidence that the models have no intersectional bias.** No interaction survives
+  correction, and on the pairs where the scorers drift, the standard instruments cannot attribute
+  an interaction to the model.
 - **A sentence-pair benchmark cannot express the effect at all.** Of 1,352 usable CrowS-Pairs items,
   3 attest a two-axis intersection, so no confirmatory pair is estimable there.
 - **Precision is bounded by prompts, not samples.** Responses to one prompt correlate (ICC 0.35 for
