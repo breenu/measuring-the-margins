@@ -10,7 +10,7 @@ containers, an explicit ``\\n`` line terminator, and UTF-8 without a BOM. A rege
 that differs byte-for-byte from the committed one means the lattice changed, and that has to be
 visible in a diff rather than absorbed by a line-ending difference between Windows and Linux.
 
-They land under ``data/lattice/`` (gitignored and regenerable, PROJECT_CONTEXT.md section 4).
+They land under ``data/lattice/`` (gitignored and regenerable, design.md § Records and manifests).
 Regenerate with ``scripts/build_lattice.py``.
 """
 

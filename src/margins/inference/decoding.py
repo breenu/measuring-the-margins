@@ -6,7 +6,7 @@ P4a stamps ``decoding_key = "greedy_v1"`` on every :class:`~margins.schemas.Prom
 **Why a hash at all.** ``Response.decoding_key`` names a profile; it does not say what the profile
 *was*. ``top_p``, ``top_k``, ``max_new_tokens`` and ``repetition_penalty`` are otherwise recorded
 nowhere, so a response would be uninterpretable without the config that produced it. Determinism is
-a contract (CLAUDE.md invariant 5), which means a response has to be self-describing:
+a contract (docs/design.md), which means a response has to be self-describing:
 :attr:`DecodingConfig.decoding_hash` is what makes ``greedy_v1`` checkable rather than merely
 labelled.
 

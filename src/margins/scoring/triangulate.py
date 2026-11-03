@@ -187,7 +187,7 @@ class Triangulator:
             if len(group) < 2:
                 raise ValueError(
                     f"harm_type {harm_type!r} was built with {len(group)} scorer(s). No harm type "
-                    "may depend on a single classifier (CLAUDE.md framing constraint 6), and a "
+                    "may depend on a single classifier (design.md framing constraint 6), and a "
                     "subset of a valid roster can still violate it."
                 )
 

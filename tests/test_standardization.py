@@ -1,6 +1,6 @@
 """The two standardization guardrails, as tests (P6).
 
-CLAUDE.md states both as rules; this file is what makes them fail loudly instead of silently:
+docs/design.md states both as rules; this file is what makes them fail loudly instead of silently:
 
 * **"standardize WITHIN a source -- the function requires a source key."** Pooling two sources into
   one z-score turns the cross-paradigm comparison into a property of the pooling, and produces

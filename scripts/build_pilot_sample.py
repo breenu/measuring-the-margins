@@ -50,7 +50,7 @@ PILOT_SAMPLE_SIZE = 50
 #: ``linux_x86_64``. Kaggle's image ships no ``bitsandbytes`` at all, so the NF4 load raises
 #: ``ImportError`` several minutes in, *after* the tokenizer download has started.
 #:
-#: The version is READ FROM THE LOCKFILE, never typed here. CLAUDE.md forbids installing unpinned
+#: The version is READ FROM THE LOCKFILE, never typed here. design.md forbids installing unpinned
 #: "to make it work"; installing the exact version the locked Linux environment resolves to is the
 #: opposite of unpinning, and it is the only way to make the notebook host resemble that
 #: environment. A hand-typed version here would drift from the lock silently.

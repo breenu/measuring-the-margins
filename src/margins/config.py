@@ -1,7 +1,7 @@
 """Validated experiment configuration and the run manifest.
 
 Why this module exists: the run manifest is the *only* experiment-tracking mechanism in this
-project (PROJECT_CONTEXT.md section 6 -- no MLflow, no W&B, no DVC). It therefore has to carry
+project (docs/design.md -- no MLflow, no W&B, no DVC). It therefore has to carry
 everything needed to reconstruct a run, and it has to be honest about what it could not
 determine. Two design points follow from that:
 
@@ -71,7 +71,7 @@ TRACKED_PACKAGES: Final[tuple[str, ...]] = (
 NOT_INSTALLED: Final[str] = "not-installed"
 
 #: Quantization settings. This is a **scalar constant recorded per run**, never an
-#: experimental axis (CLAUDE.md framing constraint 4).
+#: experimental axis (docs/design.md framing constraint 4).
 QuantSetting = Literal["nf4", "gguf_q4_k_m", "none"]
 
 #: Manifest ``inputs`` key for the lattice config's sha256. A constant rather than a literal so
@@ -128,7 +128,7 @@ class ExperimentConfig(BaseModel):
 
     Hydra composes plain YAML into a plain dict, and :func:`config_from_mapping` validates it
     into this. There are no Hydra structured configs and no hydra-zen anywhere in the project
-    (PROJECT_CONTEXT.md section 6).
+    (docs/design.md § Environment and compute).
     """
 
     model_config = ConfigDict(frozen=True, extra="forbid")
@@ -144,7 +144,7 @@ class ExperimentConfig(BaseModel):
         default="nf4",
         description=(
             "Fixed, recorded CONSTANT -- deliberately a scalar and never a list. Quantization "
-            "is not an experimental axis and not a finding (CLAUDE.md framing constraint 4)."
+            "is not an experimental axis and not a finding (docs/design.md framing constraint 4)."
         ),
     )
 
@@ -245,7 +245,7 @@ class InferenceRecord(BaseModel):
     ``environment`` records the *machine*, but neither says what the load resolved to. NF4 is a
     bitsandbytes/CUDA path, so a Windows dev run falls back to unquantized -- and a manifest in
     which that is indistinguishable from a real NF4 run would make the recorded constant worthless
-    (CLAUDE.md framing constraint 4).
+    (docs/design.md framing constraint 4).
 
     ``batch_size`` is here for the determinism claim, not for performance bookkeeping: padding
     changes floating-point reduction order, so identical token sequences are guaranteed at a *fixed*
@@ -497,8 +497,8 @@ class RunManifest(BaseModel):
     """Everything needed to reconstruct a run, including what could not be determined.
 
     ``git_sha`` and ``git_dirty`` are both ``None`` outside a repository. A manifest from a
-    dirty tree that claims a clean SHA is worse than no manifest (PROJECT_CONTEXT.md section
-    4), which is why the dirty flag is a first-class field rather than an afterthought.
+    dirty tree that claims a clean SHA is worse than no manifest (docs/design.md § Records and
+    manifests), which is why the dirty flag is a first-class field rather than an afterthought.
     """
 
     model_config = ConfigDict(frozen=True, extra="forbid")

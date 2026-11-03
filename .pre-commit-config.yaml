@@ -1,7 +1,7 @@
 # ruff + mypy + check-added-large-files.
 #
 # check-added-large-files is not hygiene here: together with .gitignore it IS the mechanism
-# that enforces "never commit model weights or raw response dumps" (CLAUDE.md guardrails).
+# that enforces "never commit model weights or raw response dumps" (docs/design.md § Conventions).
 # It replaces DVC, which this project deliberately does not use.
 
 repos:

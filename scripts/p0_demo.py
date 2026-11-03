@@ -4,7 +4,7 @@ Run with ``uv run python scripts/p0_demo.py``. Writes its manifest to a temporar
 so the demo never pollutes committed ``results/``.
 
 This demo deliberately uses **no torch**. The P0 determinism gate is the seeding utility; the
-toy-model check belongs to P5 (PROJECT_CONTEXT.md section 11).
+toy-model check belongs to P5 (docs/design.md § Determinism and validation).
 """
 
 from __future__ import annotations

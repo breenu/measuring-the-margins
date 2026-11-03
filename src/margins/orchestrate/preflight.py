@@ -7,7 +7,7 @@ and it says what to do, because the person reading it may be running this for th
 
 Why each exists:
 
-* **Clean tree / pre-registration ancestry.** ``CLAUDE.md``: "NO FULL EXPERIMENTAL RUN MAY BE
+* **Clean tree / pre-registration ancestry.** ``docs/design.md``: "NO FULL EXPERIMENTAL RUN MAY BE
   EXECUTED AGAINST AN EARLIER COMMIT" than ``prereg-v1``, and a manifest from a dirty tree that
   claims a clean SHA is worse than no manifest.
 * **Quantization.** A CUDA host without a working bitsandbytes silently loads fp16 (P5's fallback

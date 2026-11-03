@@ -431,7 +431,7 @@ def test_audit_prompts_are_open_gen_and_tagged_for_e3(
 def test_frame_provenance_names_the_pinned_generator(
     config: RedTeamConfig, lattice: DeclaredLattice, prompt_set, generator: ModelSpec
 ) -> None:  # type: ignore[no-untyped-def]
-    """PROJECT_CONTEXT section 3: a red-team seed is an Item whose provenance names the model."""
+    """docs/design.md: a red-team seed is an Item whose provenance names the model."""
     from margins.redteam import frame_items
 
     elicitation = _elicitation(config, lattice, prompt_set)

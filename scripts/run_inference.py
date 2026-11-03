@@ -18,7 +18,7 @@ complete record of what it was doing.
     uv run python scripts/run_inference.py --model llama31_8b_instruct --resume
 
 Requires the ``inference`` extra. The 7-8B checkpoints never run on the Windows dev box
-(PROJECT_CONTEXT.md section 7); use Kaggle.
+(docs/design.md § Environment and compute); use Kaggle.
 """
 
 from __future__ import annotations

@@ -9,7 +9,7 @@ result, arrived at through a pipeline that was working correctly the whole time.
 
 **Why "two scorers with reported agreement" does not address it.** Two identity-sensitive
 classifiers agree with each other and are both wrong in the same direction. Agreement measures
-shared behaviour, not shared validity (PROJECT_CONTEXT.md section 9). The roster's
+shared behaviour, not shared validity (docs/design.md § Construct validity). The roster's
 mechanism-diversity rule helps, but only the control actually measures the thing.
 
 **The control.** Score a matched set of known-neutral texts -- same descriptors, same templates,

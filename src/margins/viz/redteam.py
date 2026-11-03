@@ -61,7 +61,7 @@ def _check_descriptive(table: ResultTable) -> None:
         raise RedTeamPoweredError(
             f"{len(offenders)} red-team rows carry a q or a claimable flag. The red-team arm is "
             "a descriptive subset at powered=False and is deliberately absent from "
-            "family_benchmarks (CLAUDE.md, 21 Sep 2026). A figure must not promote it."
+            "family_benchmarks (docs/design.md, 21 Sep 2026). A figure must not promote it."
         )
 
 

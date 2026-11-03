@@ -42,7 +42,7 @@ _REASONS: dict[ClaimStatus, str] = {
     "descriptive_only": (
         "the harm type is DESCRIPTIVE-ONLY: a scorer's own interaction on known-neutral text is "
         "comparable to the model's, so emergence in the model cannot be distinguished from "
-        "emergence in the instrument (PROJECT_CONTEXT.md section 9)."
+        "emergence in the instrument (docs/design.md § Construct validity)."
     ),
     "underpowered": (
         "the cell is underpowered against the pre-registered minimum N, and underpowered cells "

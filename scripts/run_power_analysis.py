@@ -39,7 +39,8 @@ from margins.stats.config import DEFAULT_STATS, StatsConfig, load_stats_config
 from margins.stats.family import family_size
 from margins.stats.power import PowerDesign, ceiling_point, power_curve, simulate_power_point
 
-#: Measured on Kaggle, Tesla T4, NF4, 18 Sep 2026 (CLAUDE.md decision #8). Seconds per prompt.
+#: Measured on Kaggle, Tesla T4, NF4, 18 Sep 2026 (pre-registration amendment log). Seconds per
+#: prompt.
 PILOT_RATES: dict[str, float] = {
     "meta-llama/Llama-3.1-8B-Instruct": 14.0,
     "mistralai/Mistral-7B-Instruct-v0.3": 14.8,
@@ -71,7 +72,7 @@ class Budget:
 
     @property
     def kaggle_weeks(self) -> float:
-        """Free-tier Kaggle is ~30 GPU-h per week (PROJECT_CONTEXT.md section 7)."""
+        """Free-tier Kaggle is ~30 GPU-h per week (docs/design.md § Environment and compute)."""
         return self.gpu_hours / 30.0
 
 

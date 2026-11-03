@@ -91,7 +91,7 @@ EffectPattern = Literal["concentrated", "diffuse"]
 
 
 class FdrSettings(BaseModel):
-    """Benjamini-Hochberg over the confirmatory family (PROJECT_CONTEXT.md section 8)."""
+    """Benjamini-Hochberg over the confirmatory family (docs/design.md § Statistical protocol)."""
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
@@ -130,7 +130,7 @@ class FdrSettings(BaseModel):
             raise ValueError(
                 "method='fdr_bh' requires a non-empty prds_justification. BH assumes independence "
                 "or PRDS, and the tests here share items, templates and a model "
-                "(PROJECT_CONTEXT.md section 8): state the assumption or set method='fdr_by'."
+                "(design.md § Statistical protocol): state the assumption or set method='fdr_by'."
             )
         return self
 

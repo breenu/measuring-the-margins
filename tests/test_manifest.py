@@ -21,7 +21,7 @@ from margins.config import (
     write_run_manifest,
 )
 
-# PROJECT_CONTEXT.md section 4. A field silently dropped here breaks reproducibility quietly,
+# design.md § Records and manifests. A field silently dropped here breaks reproducibility quietly,
 # which is the worst way for it to break.
 REQUIRED_FIELDS = {
     "run_id",

@@ -8,7 +8,7 @@ a column silently renamed upstream fails loudly here rather than silently produc
 figure.
 
 **Why tables are committed and Parquet is not.** ``data/`` is gitignored and regenerable
-(PROJECT_CONTEXT.md section 4), which is right for score dumps and wrong for the handful of small
+(docs/design.md), which is right for score dumps and wrong for the handful of small
 frames the paper is written against. These are the paper's inputs; they live in ``results/`` beside
 ``paper_numbers.json`` and the run manifests.
 

@@ -204,7 +204,7 @@ def test_token_lookup_covers_both_notebook_hosts() -> None:
     """Kaggle and Colab expose secrets through completely different APIs.
 
     Looking in only one place means the gated Meta checkpoints 401 several minutes into a session,
-    after the weight download has already started -- on the host PROJECT_CONTEXT.md section 7 names
+    after the weight download has already started -- on the host docs/design.md
     as the debugging backup.
     """
     source = PILOT_SCRIPT.read_text(encoding="utf-8")
@@ -214,7 +214,7 @@ def test_token_lookup_covers_both_notebook_hosts() -> None:
 
 
 def test_pinned_packages_are_the_ones_the_frozen_run_installed(pilot: ModuleType) -> None:
-    """CLAUDE.md forbids installing unpinned "to make it work".
+    """docs/design.md forbids installing unpinned "to make it work".
 
     Kaggle's image has no bitsandbytes, so the pilot has to install one -- and the only version it
     may install is one the locked linux_x86_64 environment resolved to. The block was generated

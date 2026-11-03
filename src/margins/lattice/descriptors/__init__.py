@@ -2,7 +2,7 @@
 
 A descriptor source supplies **identity terms with provenance**, never items. Nothing here is a
 ``BenchmarkLoader``: ``open_gen`` is a generation path, not an ingestion one
-(PROJECT_CONTEXT.md section 5).
+(docs/design.md § Architecture).
 """
 
 from __future__ import annotations

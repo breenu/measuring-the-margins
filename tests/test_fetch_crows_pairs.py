@@ -116,7 +116,7 @@ def test_fetch_pinned_refuses_to_write_on_a_digest_mismatch(
 def test_fetch_pinned_stops_rather_than_substituting_on_a_404(
     script: ModuleType, config: Any, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    """CLAUDE.md: never work around a blocked domain; surface it."""
+    """docs/design.md: never work around a blocked domain; surface it."""
     import urllib.error
 
     def not_found(*_: Any, **__: Any) -> bytes:

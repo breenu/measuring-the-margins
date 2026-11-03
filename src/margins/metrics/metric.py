@@ -342,7 +342,7 @@ def triangulate(rows: Sequence[ItemScore]) -> tuple[tuple[str, ...], list[Observ
                 f"response {response_id!r} was scored by {len(slot)} of {len(scorer_ids)} "
                 f"scorers (missing {missing}). The triangulated score is the mean over EVERY "
                 "scorer of the harm type; a row missing one would be single-classifier-dependent "
-                "(CLAUDE.md framing constraint 6). Refusing rather than imputing."
+                "(docs/design.md framing constraint 6). Refusing rather than imputing."
             )
         first = slot[scorer_ids[0]]
         by_scorer = {sid: slot[sid].standardized for sid in scorer_ids}

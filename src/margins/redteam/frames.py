@@ -2,7 +2,7 @@
 
 This is where a candidate stops being text the red LM wrote and becomes a **frame**: a
 provenance-carrying ``Item`` whose ``Provenance`` names the pinned generator, its resolved
-revision, and the red-team version — exactly what PROJECT_CONTEXT.md section 3 anticipated when it
+revision, and the red-team version — exactly what docs/design.md
 said "a red-team seed is an ``Item`` (``benchmark="redteam"``, provenance -> the generator model,
 revision, and seed)".
 

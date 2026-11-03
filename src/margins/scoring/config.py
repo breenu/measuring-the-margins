@@ -1,7 +1,7 @@
 """The scoring roster and its rules, as validated configuration (P6).
 
-**The rules this file enforces are the ones that are easiest to violate in prose.** CLAUDE.md's
-framing constraint 6 and PROJECT_CONTEXT.md section 9 require at least two *independent* scorers per
+**The rules this file enforces are the ones that are easiest to violate in prose.** docs/design.md's
+framing constraint 6 and docs/design.md *independent* scorers per
 harm type, with reported agreement and a drift control. A roster that quietly ships one scorer for a
 harm type, or two scorers that are the same classifier twice, satisfies neither -- and no downstream
 test would notice, because the pipeline would run perfectly and produce a number.
@@ -122,7 +122,7 @@ MIN_SCORERS_PER_HARM: Final[int] = 2
 class SignProbe(BaseModel):
     """Two texts whose relative harm is not in dispute, used to check a scorer's sign.
 
-    The standardization rule (CLAUDE.md, PROJECT_CONTEXT.md section 8) is "higher = more harm,
+    The standardization rule (docs/design.md, docs/design.md) is "higher = more harm,
     guaranteed by test". A `sign` field alone is an assertion; a probe makes it falsifiable, because
     a flipped sign turns ``harmful > benign`` into ``benign > harmful`` and
     :func:`margins.scoring.standardize.verify_sign` raises.
@@ -430,7 +430,7 @@ class CalibrationSettings(BaseModel):
         ge=150,
         le=300,
         description=(
-            "Bounded by the range PROJECT_CONTEXT.md section 9 pre-registers. Bounds rather than a "
+            "Bounded by the range docs/design.md-registers. Bounds rather than a "
             "free integer: a sample quietly shrunk to 20 would still compute a precision."
         ),
     )
@@ -481,7 +481,7 @@ class ScoringConfig(BaseModel):
                 raise ValueError(
                     f"harm_type {harm_type!r} has {len(group)} scorer(s); at least "
                     f"{MIN_SCORERS_PER_HARM} are required. No harm type may depend on a single "
-                    "classifier (CLAUDE.md framing constraint 6)."
+                    "classifier (docs/design.md framing constraint 6)."
                 )
             mechanisms = {spec.mechanism for spec in group}
             if len(mechanisms) < 2:
@@ -490,7 +490,7 @@ class ScoringConfig(BaseModel):
                     f"harm_type {harm_type!r} is measured by {len(group)} scorers that all use "
                     f"mechanism {only!r}. Two scorers sharing a mechanism are not independent: "
                     "they fail the same way and agree while doing it, and agreement measures "
-                    "shared behaviour, not shared validity (PROJECT_CONTEXT.md section 9)."
+                    "shared behaviour, not shared validity (docs/design.md § Construct validity)."
                 )
         return self
 

@@ -65,8 +65,7 @@ command and audited against those artifacts as it is drawn.
 - **Decoding sensitivity (E4) is small:** across temperatures 0, 0.7 and 1.0 the pooled estimates
   move by at most 0.19 SD.
 
-Phases are built strictly in the order in [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md)
-§5; each is gated by §11.
+The rules the code is built under are in [`docs/design.md`](docs/design.md).
 
 ## Install
 
@@ -96,6 +95,88 @@ uv run ruff format --check .
 uv run mypy src
 ```
 
+## Reproducing the results
+
+Everything below is driven by one entry point, `scripts/run_p11.py`. Every step accepts
+`--dry-run`, which prints the exact commands it would run and runs nothing, and every generation
+step is resumable: if a session is interrupted, re-run the identical command. The design choices
+behind each step are in [`docs/design.md`](docs/design.md) and [`docs/methods.md`](docs/methods.md);
+the pre-registered analysis is [`docs/preregistration.md`](docs/preregistration.md).
+
+**1. Set up** (Linux with a CUDA GPU for generation; any OS for everything else). Generation needs
+`uv sync --extra inference`, a Hugging Face token whose account has accepted the Llama licence,
+and enough disk for two 7-8B checkpoints. The models load in 4-bit NF4, so one 16 GB GPU is
+enough. If a dependency will not resolve on your machine, report it: never unpin a package or
+install outside the lockfile to make it work, because the locked versions are part of what the
+run manifests record.
+
+```bash
+uv run python scripts/pin_models.py --models llama31_8b_instruct mistral7b_instruct_v03
+uv run python scripts/run_p11.py prepare
+uv run python scripts/run_p11.py verify-gpu --model llama31_8b_instruct
+uv run python scripts/run_p11.py verify-gpu --model mistral7b_instruct_v03
+uv run python scripts/run_p11.py budget
+```
+
+`prepare` fetches every pinned input (word list, CrowS-Pairs) and builds the prompt sets;
+`verify-gpu` stops if NF4 cannot load; `budget` turns the measured generation speed into
+GPU-hours and sizes the red-team frame cap.
+
+**2. Smoke run.** A small end-to-end run on real multi-sample data that must reach the
+multiple-testing correction. Do not proceed to the full run until this passes. A smoke run that
+reports NOTHING TO CORRECT has failed, however cleanly it exits: the correction path never ran.
+
+```bash
+uv run python scripts/run_p11.py smoke --model llama31_8b_instruct
+```
+
+**3. Generation** (GPU), each model in turn:
+
+```bash
+uv run python scripts/run_p11.py e1 --model llama31_8b_instruct
+uv run python scripts/run_p11.py e1 --model mistral7b_instruct_v03
+uv run python scripts/run_p11.py crows --model llama31_8b_instruct
+uv run python scripts/run_p11.py crows --model mistral7b_instruct_v03
+uv run python scripts/run_p11.py e4 --model llama31_8b_instruct
+uv run python scripts/run_p11.py e4 --model mistral7b_instruct_v03
+uv run python scripts/run_p11.py redteam-elicit
+uv run python scripts/run_p11.py redteam-prompts --max-frames <N from budget>
+uv run python scripts/run_p11.py redteam-audit --model llama31_8b_instruct
+uv run python scripts/run_p11.py redteam-audit --model mistral7b_instruct_v03
+```
+
+**4. Analysis** (CPU only; no GPU needed). Scoring, metrics, the statistics stage, the result
+tables and the figures, then the decoding-sensitivity analysis:
+
+```bash
+uv run python scripts/run_p11.py process
+uv run python scripts/run_p11.py e4-process
+uv run python scripts/emit_run_numbers.py
+uv run python scripts/make_figures.py
+```
+
+**5. Reproducibility rerun (R2).** Reruns the class x race grid for both models and applies the
+pass rule fixed in the pre-registration. On the original kind of GPU (`--machine lab` names the
+same-hardware rerun):
+
+```bash
+uv run python scripts/run_p11.py r2 --model llama31_8b_instruct --machine lab
+uv run python scripts/run_p11.py r2 --model mistral7b_instruct_v03 --machine lab
+uv run python scripts/run_p11.py r2-process --machine lab
+```
+
+On the Kaggle free tier, use the generated notebook `notebooks/r2_kaggle.ipynb` (regenerate it with
+`uv run python scripts/build_r2_notebook.py`): attach two T4 GPUs and an `HF_TOKEN` secret, run all
+cells, and download `r2_kaggle_outputs.tar.gz`. Unpack it into `data/`, then analyse on any
+machine:
+
+```bash
+uv run python scripts/run_p11.py r2-process --machine kaggle
+```
+
+The R2 result reported here is a **failure** of that rule (32 of 36 terms on both machines); see
+[`docs/r2_diagnosis.md`](docs/r2_diagnosis.md).
+
 ## What P0 gives you
 
 - **`margins.repro.set_global_seed`** — seeds `random`, legacy global `numpy`, `PYTHONHASHSEED`
@@ -111,12 +192,6 @@ uv run mypy src
   returns it **re-read from disk**, so the object a caller holds cannot drift from the bytes a
   reproducer will read. `run_id` is derived from the config hash and a recorded timestamp, not
   randomly generated.
-
-Demo both:
-
-```bash
-uv run python scripts/p0_demo.py
-```
 
 ## What P1 gives you
 
@@ -237,10 +312,9 @@ Development runs on a Windows laptop (core + dev extras, no `torch`). The 7–8B
 red-team generation run on Linux with NF4 quantization, and never locally. Quantization is a
 **fixed recorded constant**, not an experimental axis.
 
-**What actually ran.** The confirmatory sweep ran on a single **NVIDIA RTX A4000 (16 GB)** in a
-university teaching lab, about 40 GPU-hours at NF4 for both models (procedure:
-[`docs/runbook_p11.md`](docs/runbook_p11.md)). Every run manifest records the actual GPU, driver,
-`torch` version, thread count and BLAS. We did **not** run the sweep on a free tier.
+**What actually ran.** The confirmatory sweep ran on a single **NVIDIA RTX A4000 (16 GB)**, about
+40 GPU-hours at NF4 for both models (procedure: [Reproducing the results](#reproducing-the-results)).
+Every run manifest records the actual GPU, driver, `torch` version, thread count and BLAS. We did **not** run the sweep on a free tier.
 
 **What has been reproduced, exactly.** R2 reran the E4 subset (class × race, 432 prompts, both
 models) on Kaggle's free-tier Tesla T4s, under a pass rule fixed before the rerun: every estimate
@@ -262,11 +336,10 @@ gated `inference-cpu` job only verifies that the inference extra installs.
 
 ## Reference
 
-Architecture, record schemas, module interfaces, the full phase plan, the statistical protocol,
-the emergence estimand, validation gates, timeline, and risks are in
-[`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md). Always-on working memory (status,
-commands, framing constraints, design invariants, guardrails, open decisions) is in
-[`CLAUDE.md`](CLAUDE.md).
+The framing constraints, design invariants, statistical protocol and conventions are in
+[`docs/design.md`](docs/design.md); what each data source measures is in
+[`docs/methods.md`](docs/methods.md); the pre-registration and its amendment log are in
+[`docs/preregistration.md`](docs/preregistration.md).
 
 `data/` is gitignored and regenerable. Model weights and raw response dumps are never committed;
 raw dumps ship as a Zenodo artifact at release.

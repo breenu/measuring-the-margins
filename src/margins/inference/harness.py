@@ -1,7 +1,7 @@
 """The resumable run harness (P5.T2).
 
 **Why this is a gate item and not a convenience.** The confirmatory sweep runs on free-tier Kaggle:
-12-hour sessions, ~30 GPU-hours a week (PROJECT_CONTEXT.md section 7). A session that dies at hour
+12-hour sessions, ~30 GPU-hours a week (docs/design.md). A session that dies at hour
 eleven must not cost eleven hours of GPU time, and the top-listed risk in section 14 is exactly
 "compute over free quota". A sweep that cannot resume is a sweep that cannot finish.
 
@@ -58,7 +58,7 @@ class GenerativeBackend(Protocol):
     Typing against this rather than the concrete class is what lets the resumability gate be tested
     without a model: the kill/restart behaviour is a property of the harness, not of any checkpoint,
     and a test that had to load weights to exercise it would be testing the wrong thing. It is also
-    the seam the documented llama.cpp/GGUF fallback backend (PROJECT_CONTEXT.md section 6) would
+    the seam the documented llama.cpp/GGUF fallback backend (docs/design.md) would
     slot into.
     """
 
@@ -93,7 +93,7 @@ class GenerativeBackend(Protocol):
         """
 
 
-#: Raw text goes to JSONL (PROJECT_CONTEXT.md section 6); ``data/`` is gitignored and regenerable.
+#: Raw text goes to JSONL (docs/design.md); ``data/`` is gitignored and regenerable.
 DEFAULT_RESPONSES_DIR: Final[Path] = Path("data") / "responses"
 
 

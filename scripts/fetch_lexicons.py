@@ -17,7 +17,7 @@ Two modes, matching ``scripts/pin_models.py``:
   the bytes against the recorded sha256, and only then write. This is what CI runs. It is
   deliberately a separate mode from ``--write``: ``--write`` resolves HEAD, so using it to
   populate a machine would silently fetch whatever upstream looks like today and score against a
-  wordlist nobody pinned. A digest mismatch here STOPS rather than writing (CLAUDE.md: never
+  wordlist nobody pinned. A digest mismatch here STOPS rather than writing (docs/design.md: never
   unpin to make it work).
 
 Kept out of the test suite on purpose -- tests must not depend on the network, and the core CI job
@@ -248,7 +248,7 @@ def write(data_dir: Path, *, timeout: int = 60) -> int:
             print(
                 f"STOPPING: could not resolve a revision for {source.repo}: {error}. "
                 "Refusing to substitute another source or to leave the pin unresolved -- surface "
-                "this to a human (CLAUDE.md: never work around a blocked domain).",
+                "this to a human (docs/design.md: never work around a blocked domain).",
                 file=sys.stderr,
             )
             return 1

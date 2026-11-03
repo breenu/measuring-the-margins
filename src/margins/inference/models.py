@@ -21,7 +21,7 @@ measurement of off-task drift. The confirmatory pair is therefore instruct-tuned
 recorded: the two families wrap a prompt in different chat templates, so the wrapper is part of what
 each model was asked (see :data:`~margins.inference.decoding.PromptFormat`).
 
-**Quantization is a fixed recorded constant, never an axis** (CLAUDE.md framing constraint 4). It is
+**Quantization is a fixed recorded constant, never an axis** (design.md framing constraint 4). It is
 not a field here: it lives on ``ExperimentConfig.quant`` as a scalar, and what the backend *actually
 did* is recorded separately, because a Linux NF4 intent and a Windows unquantized fallback must not
 be indistinguishable in the record.
@@ -71,7 +71,7 @@ CONFIRMATORY_MODELS: Final[tuple[str, ...]] = (
 )
 #: Laptop-runnable development model. Every local determinism / resumability test targets this.
 DEV_MODEL: Final[str] = "llama32_1b_instruct"
-#: Tiny random checkpoint for CI. PROJECT_CONTEXT.md section 7 asked for its availability to be
+#: Tiny random checkpoint for CI. docs/design.md
 #: verified at P5; it was (9 Sep 2026).
 CI_MODEL: Final[str] = "tiny_random_llama"
 

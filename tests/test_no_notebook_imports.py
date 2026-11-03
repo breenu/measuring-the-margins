@@ -1,6 +1,6 @@
 """Guardrail: production logic never depends on notebooks.
 
-CLAUDE.md forbids load-bearing notebooks -- ``src/`` and ``scripts/`` must not import from
+docs/design.md forbids load-bearing notebooks -- ``src/`` and ``scripts/`` must not import from
 ``notebooks/``. Cheap to enforce here; expensive to discover in review.
 """
 

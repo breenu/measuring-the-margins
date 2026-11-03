@@ -167,7 +167,7 @@ class AttributeMap(BaseModel):
 
 
 class ScreeningSettings(BaseModel):
-    """The construct-validity screen's thresholds (PROJECT_CONTEXT.md section 9).
+    """The construct-validity screen's thresholds (docs/design.md § Construct validity).
 
     Every threshold is here rather than in code so the screen is inspectable and its effect on the
     exclusion counts is a config diff. What is NOT configurable: the exclusion *reasons* and the

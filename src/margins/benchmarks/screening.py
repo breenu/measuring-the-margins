@@ -1,6 +1,6 @@
 """Construct-validity screening for the extractive source (P2).
 
-PROJECT_CONTEXT.md section 9 asks for exactly this: *"For CrowS-Pairs run minimal-pair checks
+docs/design.md § Construct validity asks for exactly this: *"For CrowS-Pairs run minimal-pair checks
 (edit distance, single-attribute swap); flag non-minimal pairs; ... log every exclusion with a
 machine-readable reason."* Gate P2 adds the property that makes such a log trustworthy:
 **screening is deterministic.**

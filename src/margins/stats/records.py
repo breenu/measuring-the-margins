@@ -187,7 +187,7 @@ class PowerResult(BaseModel):
             if self.min_cell_n != self.min_renderings_per_cell:
                 raise ValueError(
                     "min_cell_n and min_renderings_per_cell are ONE decision and must agree "
-                    "(PROJECT_CONTEXT.md section 8)"
+                    "(docs/design.md § Statistical protocol)"
                 )
         return self
 

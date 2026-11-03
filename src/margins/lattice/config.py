@@ -16,7 +16,7 @@ Three things this module refuses to allow, structurally:
    non-gender x non-gender (novelty claim 5). This is a validator, not a convention: a config that
    would fail the gate does not load.
 3. **An unbounded confirmatory family.** The confirmatory pairs *are* the FDR family
-   (PROJECT_CONTEXT.md section 8), so their number is capped. An unbounded family drives the BH
+   (design.md § Statistical protocol), so their number is capped. An unbounded family drives the BH
    threshold low enough that realized power collapses regardless of per-cell N.
 
 **Construct caveat.** Choosing which descriptors represent an axis is a construct choice, not a
@@ -26,7 +26,7 @@ in ``value_provenance.md``; the ``preference`` annotation is carried verbatim fr
 reader can see which terms upstream marked dispreferred and check that none were used.
 
 Hydra composes the plain YAML, the result is converted to a plain dict, and validation happens
-here in Pydantic — no Hydra structured configs, no hydra-zen (PROJECT_CONTEXT.md section 6).
+here in Pydantic — no Hydra structured configs, no hydra-zen (design.md § Environment and compute).
 """
 
 from __future__ import annotations
@@ -74,7 +74,7 @@ SourceKind = Literal["descriptor_taxonomy", "custom"]
 PairStatus = Literal["confirmatory", "exploratory"]
 
 #: The confirmatory pairs are the FDR family, so the family size is bounded here rather than
-#: discovered at P9 (PROJECT_CONTEXT.md section 8 pre-registers 6-8 pairs).
+#: discovered at P9 (docs/design.md § Statistical protocol pre-registers 6-8 pairs).
 MAX_CONFIRMATORY_PAIRS: Final[int] = 8
 
 #: Novelty claim 5 and gate P3: the primary intersections must reach beyond gender-anchored
@@ -82,7 +82,7 @@ MAX_CONFIRMATORY_PAIRS: Final[int] = 8
 MIN_NON_GENDER_CONFIRMATORY_PAIRS: Final[int] = 2
 
 #: Values per axis are deliberately few. Cell count grows multiplicatively and projected N per
-#: cell falls with it, so breadth here is power spent (PROJECT_CONTEXT.md section 14). The
+#: cell falls with it, so breadth here is power spent (docs/design.md § Scope). The
 #: confirmatory config aims for 3-5; the hard bounds leave room for small test fixtures.
 MIN_VALUES_PER_AXIS: Final[int] = 2
 MAX_VALUES_PER_AXIS: Final[int] = 6

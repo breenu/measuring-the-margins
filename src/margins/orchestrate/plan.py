@@ -1,10 +1,10 @@
 """Every command the P11 lab run executes, built in one place.
 
 **This module is the only place a P11 argv is written.** ``scripts/run_p11.py`` executes these
-commands; ``docs/runbook_p11.md`` prints them; ``tests/test_p11_orchestration.py`` parses every
-one of them against the REAL script's argparse parser, so a flag that does not exist fails the
-suite rather than failing at the lab on a booked GPU. The runbook's command list is checked the
-same way.
+commands; the README's "Reproducing the results" section prints them;
+``tests/test_p11_orchestration.py`` parses every one of them against the REAL script's argparse
+parser, so a flag that does not exist fails the suite rather than failing on a booked GPU. The
+README's command list is checked the same way.
 
 **Layout: one directory per (arm, model).** ``run_inference.py --resume`` continues the NEWEST
 response file under ``<out-dir>/<model>/``. Giving each arm its own out-dir is what makes "newest"

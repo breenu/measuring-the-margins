@@ -1,6 +1,6 @@
 """Within-benchmark standardization, and the sign contract (P6).
 
-Two rules from CLAUDE.md meet here, and both are enforced rather than documented:
+Two rules from docs/design.md meet here, and both are enforced rather than documented:
 
 1. **"Never standardize harm scores across sources -- standardize WITHIN a source (the function
    requires a source key)."** :func:`standardize_within_benchmark` takes ``benchmark`` as a required
@@ -119,7 +119,7 @@ def standardize_within_benchmark(
         raise ValueError(
             f"standardize_within_benchmark({benchmark!r}) was given rows from {foreign}. "
             "Standardization is WITHIN a source, never across: pooling sources into one z-score "
-            "makes the cross-paradigm comparison a property of the pooling (CLAUDE.md guardrails)."
+            "makes the cross-paradigm comparison a property of the pooling (docs/design.md)."
         )
 
     unsigned = sorted({s.scorer_id for s in scores if s.scorer_id not in signs})

@@ -51,7 +51,7 @@ DRIFT_INPUT_KEY: Final[str] = "drift_parquet"
 
 
 class BootstrapSettings(BaseModel):
-    """The cluster bootstrap over items (PROJECT_CONTEXT.md section 8).
+    """The cluster bootstrap over items (docs/design.md § Statistical protocol).
 
     The resampling unit is not configurable, deliberately: it is the **item (prompt)**, resampled
     with replacement within each cell. That is the pre-registered unit, and a config that could

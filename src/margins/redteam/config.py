@@ -418,7 +418,7 @@ class RedTeamConfig(BaseModel):
 
         The source is the **red LM**, because that is what produced the text. ``sha256`` digests
         the frame itself, so a frame traces to the exact checkpoint, revision and red-team version
-        that emitted it — which is what PROJECT_CONTEXT.md section 3 means by "a red-team seed is
+        that emitted it — which is what docs/design.md "a red-team seed is
         an Item whose provenance names the generator model, revision, and seed".
         """
         return Provenance(

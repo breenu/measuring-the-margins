@@ -9,7 +9,7 @@ attribute, and the measurement is which member the model finds more likely.
 1. **This is autoregressive sentence log-likelihood, not masked pseudo-log-likelihood.** The
    original metric conditions on the unmodified tokens and masks the modified ones, which a
    decoder-only model cannot do. Llama and Mistral are decoder-only, so a whole-sequence
-   autoregressive log-likelihood is used instead. PROJECT_CONTEXT.md section 9 names this as a
+   autoregressive log-likelihood is used instead. design.md § Construct validity names this as a
    caveat to state, not a detail to absorb; ``docs/methods.md`` states it.
 2. **The stereo/anti-stereo direction is resolved HERE, once.** The upstream ``sent_more`` column
    is *not* always the stereotyping sentence: on rows where ``stereo_antistereo == "antistereo"``

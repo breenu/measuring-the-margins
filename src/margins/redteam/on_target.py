@@ -3,7 +3,7 @@
 Gate P8 requires "human on-target % on a sample reported". **The labeling is the human's work**;
 this module draws the sample, defines what a label is, and computes the percentage once labels come
 back. It deliberately does not attempt to auto-label — asking a model whether a model-generated
-prompt is on-target would be a scorer judging a scorer, which is exactly what CLAUDE.md's
+prompt is on-target would be a scorer judging a scorer, which is exactly what docs/design.md's
 guardrails forbid and what makes the number worthless.
 
 This is the same scaffold shape as :mod:`margins.scoring.calibration`, and the parallel is

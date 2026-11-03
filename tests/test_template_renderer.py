@@ -92,7 +92,7 @@ def test_renderer_satisfies_the_prompt_generator_protocol(
 
 
 def test_templates_are_items_carrying_provenance(tiny_items: list[Item]) -> None:
-    """Every prompt must trace to something version-anchored (PROJECT_CONTEXT.md section 3)."""
+    """Every prompt must trace to something version-anchored (design.md § Records and manifests)."""
     for item in tiny_items:
         assert item.benchmark == TEMPLATE_ITEM_BENCHMARK
         assert item.task_type is TaskType.OPEN_GEN

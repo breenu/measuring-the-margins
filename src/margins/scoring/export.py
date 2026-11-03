@@ -1,11 +1,11 @@
 """Scoring artifacts: scores, the drift control, and the agreement table (P6).
 
 **This is the project's first Parquet writer, so it sets the convention -- including its limits.**
-PROJECT_CONTEXT.md section 6 says "raw text -> JSONL, tabular -> Parquet", and `ItemScore` is
+design.md § Environment and compute says "raw text -> JSONL, tabular -> Parquet", and `ItemScore` is
 tabular. But Parquet is **not byte-deterministic**: the file embeds the writer's version and
 per-column metadata, so two runs of identical data on different `pyarrow` builds produce different
 bytes. The lattice and prompt exports assert byte identity; **these cannot**, and pretending
-otherwise would be a reproducibility claim we have not demonstrated (CLAUDE.md guardrails).
+otherwise would be a reproducibility claim we have not demonstrated (docs/design.md § Conventions).
 
 What is asserted instead, and what the tests check: **round-trip content equality on a sorted
 frame**. Rows are written in a canonical sort order, so reading a file back and comparing values
@@ -238,7 +238,7 @@ def render_agreement_markdown(
         "",
         "High agreement means the scorers behave alike, **not** that they are measuring harm",
         "correctly. Two identity-sensitive classifiers agree with each other and are wrong in the",
-        "same direction (PROJECT_CONTEXT.md §9). Read this table alongside `drift_control.parquet`",
+        "same direction (docs/design.md). Read this table alongside `drift_control.parquet`",
         "and `calibration_report.md`; a harm type needs all three before it is load-bearing.",
         "",
     ]

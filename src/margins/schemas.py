@@ -66,7 +66,7 @@ __all__ = [
 _SHA256_RE: Final = re.compile(r"^[0-9a-f]{64}$")
 
 #: Distinguishes scores of model output from scores of the matched neutral control texts used
-#: by the scorer identity-drift control (PROJECT_CONTEXT.md section 9). Without this split the
+#: by the scorer identity-drift control (design.md § Construct validity). Without this split the
 #: drift control cannot be estimated, and RQ2's estimand is not credible.
 Condition = Literal["model", "drift_control"]
 

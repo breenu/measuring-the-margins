@@ -1,6 +1,6 @@
 """Seeding and determinism reporting.
 
-Why this module exists: determinism is a *contract* in this project (CLAUDE.md invariant 5),
+Why this module exists: determinism is a *contract* in this project (docs/design.md),
 and a determinism claim that a reproducer cannot check is worse than no claim at all. So this
 module does two things that are easy to conflate and must not be:
 
@@ -13,7 +13,7 @@ bit-identical output everywhere. What it buys is spelled out by
 :func:`residual_nondeterminism_note`, and nothing in this codebase may claim more.
 
 ``torch`` is imported lazily and is genuinely optional. The Windows dev environment installs
-core + dev only (PROJECT_CONTEXT.md section 7) and this module is fully functional there.
+core + dev only (design.md § Environment and compute) and this module is fully functional there.
 """
 
 from __future__ import annotations
@@ -136,7 +136,7 @@ def _torch_module() -> Any | None:
 def set_global_seed(seed: int) -> tuple[SeedReport, np.random.Generator]:
     """Seed every global RNG we can reach and hand back an *explicit* numpy generator.
 
-    The returned :class:`numpy.random.Generator` is the point of the tuple: CLAUDE.md forbids
+    The returned :class:`numpy.random.Generator` is the point of the tuple: docs/design.md forbids
     hidden global RNG on stochastic paths, so callers are expected to thread this object
     through rather than reach for ``np.random.*``. The legacy global is seeded anyway, because
     third-party code (statsmodels, seaborn, scipy) still reads it.

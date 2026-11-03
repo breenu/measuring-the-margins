@@ -9,7 +9,7 @@ stage allowed to produce a :class:`~margins.schemas.Prompt`.
 for the full product of every axis against every other. That is a power decision, not a
 convenience: crossing five axes exhaustively would multiply the cell count while dividing the
 rendering budget per cell, and — for confirmatory pairs, which *are* the FDR family
-(PROJECT_CONTEXT.md section 8) — would push the BH threshold low enough that nothing survives
+(design.md § Statistical protocol) — would push the BH threshold low enough that nothing survives
 correction. :func:`DeclaredLattice.cells` therefore emits exactly
 ``sum over declared pairs of |A| * |B|`` order-2 cells and no others.
 
@@ -59,7 +59,7 @@ __all__ = [
 
 #: ``cell_id`` grammar: ``axis=value`` joined by ``|`` in canonical ``compose_rank`` order. The
 #: id is a *label*, never something to parse structure back out of — ``Metric.compute`` takes the
-#: cells themselves for exactly that reason (PROJECT_CONTEXT.md section 3).
+#: cells themselves for exactly that reason (docs/design.md § Records and manifests).
 VALUE_SEPARATOR = "="
 AXIS_SEPARATOR = "|"
 

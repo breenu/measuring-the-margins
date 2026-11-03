@@ -5,7 +5,7 @@ This is the first stage that turns an :class:`~margins.schemas.IdentityCell` int
 RQ2, the primary estimand — actually begins.
 
 **Injected, not derived.** The :class:`~margins.interfaces.PromptGenerator` Protocol carries two
-incompatible semantics behind one signature (PROJECT_CONTEXT.md section 3). This module implements
+incompatible semantics behind one signature (docs/design.md). This module implements
 the *injecting* one: a cell is placed into a neutral template frame, which is what makes arbitrary
 lattice cells reachable — including the non-gender x non-gender cells that gate P3 requires and
 that no extractive source attests. The *deriving* one (``ExtractiveRenderer``, P4b) reads a cell
@@ -37,7 +37,7 @@ must be made before the CrowS-Pairs loader, not after.
    pinned P3 provenance: when a phrasing is wrong, the lever is the frame or the compose rule,
    never the sourced term.
 
-TODO(P6): the scorer identity-drift control (PROJECT_CONTEXT.md section 9) reuses **these**
+TODO(P6): the scorer identity-drift control (docs/design.md § Construct validity) reuses **these**
 templates and **these** descriptors with a neutral control text, which is what makes the control
 matched by construction. It is a scoring-stage concern and is not built here, but the shape of
 this module is what makes it cheap later.
@@ -84,7 +84,7 @@ __all__ = [
 ]
 
 #: Every template is an :class:`~margins.schemas.Item` under this source label, so a rendered
-#: prompt traces to something carrying :class:`~margins.schemas.Provenance` (PROJECT_CONTEXT.md
+#: prompt traces to something carrying :class:`~margins.schemas.Provenance` (docs/design.md
 #: section 3). ``Prompt.item_id`` stays required rather than optional because of this.
 TEMPLATE_ITEM_BENCHMARK: Final[str] = "open_gen_templates"
 TEMPLATE_ITEM_PREFIX: Final[str] = f"{TEMPLATE_ITEM_BENCHMARK}/"
@@ -242,7 +242,7 @@ def template_key(item: Item) -> str:
 def template_items(config: PromptSetConfig, files: Sequence[TemplateFile]) -> list[Item]:
     """Turn template files into provenance-carrying :class:`~margins.schemas.Item` records.
 
-    A template is an ``Item`` (PROJECT_CONTEXT.md section 3) so that
+    A template is an ``Item`` (docs/design.md § Records and manifests) so that
     ``TemplateRenderer.render(items, cells)`` is a genuine cross-product of templates x cells and
     every prompt traces back to something version-anchored. ``payload`` carries the frame text and
     the slots the frame actually references — detected from the parsed template rather than
@@ -401,7 +401,7 @@ class TemplateRenderer:
 
     ``open_gen`` only. An item that is not an ``open_gen`` template is rejected rather than
     coerced: the extractive semantics belong to ``ExtractiveRenderer`` (P4b), and a renderer that
-    quietly accepted both would be the exact confusion PROJECT_CONTEXT.md section 3 warns about —
+    quietly accepted both would be the exact confusion docs/design.md —
     you cannot assign "working-class Black" to a CrowS-Pairs item about religion.
     """
 

@@ -13,7 +13,8 @@ arguments, and refuses to start one that would not be the pre-registered measure
 * :mod:`~margins.orchestrate.budget` -- GPU-hour projections from MEASURED speed.
 * :mod:`~margins.orchestrate.figure` -- the smoke run's bannered emergence figure.
 
-The entry point is ``scripts/run_p11.py``; the human procedure is ``docs/runbook_p11.md``.
+The entry point is ``scripts/run_p11.py``; the step-by-step procedure is the "Reproducing the
+results" section of ``README.md``.
 """
 
 from __future__ import annotations

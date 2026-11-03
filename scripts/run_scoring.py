@@ -12,7 +12,7 @@ and a run manifest carrying the roster, every scorer's pin, and the agreement su
 
 **The drift control runs on every invocation, not on a flag.** It is not an optional diagnostic:
 without it the interaction P7 estimates cannot be distinguished from the scorer's own response to
-identity terms, and RQ2's estimand is not credible (PROJECT_CONTEXT.md section 9). Making it
+identity terms, and RQ2's estimand is not credible (docs/design.md § Construct validity). Making it
 skippable would make the credible path the one you have to remember to ask for.
 
 **The EXTRACTIVE paradigm is the one exception, and it is a structural one (P2).** A roster of

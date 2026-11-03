@@ -46,7 +46,7 @@ __all__ = [
     "render_screening_report",
 ]
 
-#: Raw text goes to JSONL, tabular to CSV (PROJECT_CONTEXT.md section 6). The exclusion log is
+#: Raw text goes to JSONL, tabular to CSV (docs/design.md). The exclusion log is
 #: `excluded_items.csv` because section 9 names that file by name.
 ITEMS_FILENAME = "items_v1.jsonl"
 EXCLUSIONS_FILENAME = "excluded_items.csv"
@@ -91,7 +91,7 @@ def read_items(path: Path) -> list[Item]:
 
 
 def render_exclusions_csv(result: ScreeningResult) -> str:
-    """The machine-readable exclusion log (PROJECT_CONTEXT.md section 9).
+    """The machine-readable exclusion log (docs/design.md § Construct validity).
 
     One row per excluded item, carrying the reason as a stable enum **value** plus enough of the
     source to audit the decision without re-reading the pinned file. ``lineterminator="\\n"`` and

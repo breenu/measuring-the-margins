@@ -48,7 +48,7 @@ class BenchmarkFile(NamedTuple):
 
 
 #: The one extractive source in the confirmatory scope. WinoBias, StereoSet and BBQ are out of
-#: scope unless ahead of schedule (PROJECT_CONTEXT.md section 1); each would add an entry here.
+#: scope unless ahead of schedule (docs/design.md § Scope); each would add an entry here.
 SOURCE: BenchmarkFile = BenchmarkFile(
     name="crows-pairs",
     repo=CROWS_PAIRS_RELEASE.repo,
@@ -194,7 +194,7 @@ def write(data_dir: Path, *, timeout: int = 60) -> int:
         print(
             f"STOPPING: could not resolve a revision for {SOURCE.repo}: {error}. Refusing to "
             "substitute another source or to leave the pin unresolved -- surface this to a human "
-            "(CLAUDE.md: never work around a blocked domain).",
+            "(docs/design.md: never work around a blocked domain).",
             file=sys.stderr,
         )
         return 1

@@ -3,7 +3,7 @@
 Gate P6 requires "scorer precision/recall on 150-300 labeled items". **The labeling is the human's
 work**; this module builds the sample, defines what a label is, and computes the metrics once labels
 come back. It deliberately does not attempt to generate labels -- an LLM judge treated as ground
-truth is exactly what CLAUDE.md's guardrails forbid, and a scorer calibrated against another scorer
+truth is exactly what design.md's guardrails forbid, and a scorer calibrated against another scorer
 is not calibrated at all.
 
 **Why the sample is stratified rather than uniform.** A uniform sample of a corpus where most
@@ -20,7 +20,7 @@ Both strata are recorded on each sampled row, so the report can say what the sam
 reviewer can judge whether precision estimated on it transfers.
 
 **Determinism.** Sampling routes through :func:`margins.repro.set_global_seed` and threads the
-returned generator, per CLAUDE.md's rule that no stochastic path may reach for a hidden global RNG.
+returned generator, per design.md's rule that no stochastic path may reach for a hidden global RNG.
 The same responses, config and seed give the same sample on any machine.
 """
 

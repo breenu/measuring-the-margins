@@ -1,7 +1,7 @@
 """The roster's rules are enforced at load, not in prose (P6).
 
-CLAUDE.md framing constraint 6 says no harm type may depend on a single classifier, and
-PROJECT_CONTEXT.md section 9 says two scorers sharing a mechanism are not independent. Both are the
+docs/design.md framing constraint 6 says no harm type may depend on a single classifier, and
+docs/design.md. Both are the
 kind of rule that a refactor can quietly drop when it lives only in a comment, so both are
 validators -- and these tests are what stop someone from "fixing" a failing config by relaxing them.
 """

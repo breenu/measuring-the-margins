@@ -141,7 +141,7 @@ class LoadReport(BaseModel):
     """What loading the model actually did, as opposed to what was requested.
 
     Recorded into the run manifest. The ``quant_requested``/``quant_actual`` split is the point:
-    CLAUDE.md framing constraint 4 makes quantization a *fixed recorded constant*, and a constant
+    design.md framing constraint 4 makes quantization a *fixed recorded constant*, and a constant
     that silently differs from what ran is worse than no constant. A Windows dev load falls back to
     unquantized, and this says so, with the reason.
     """
@@ -259,7 +259,7 @@ class HFBackend:
         if importlib.util.find_spec("bitsandbytes") is None:
             return "none", (
                 "bitsandbytes is not installed (it is Linux-gated in this project's lock, "
-                "PROJECT_CONTEXT.md section 7); loaded unquantized instead of NF4"
+                "docs/design.md § Environment and compute); loaded unquantized instead of NF4"
             )
         if not self._torch().cuda.is_available():
             return "none", (
@@ -563,7 +563,7 @@ class HFBackend:
         Construct caveat, stated because the paper depends on it: CrowS-Pairs' PLL was designed for
         *masked* LMs. The pinned checkpoints are decoder-only, so this is autoregressive sentence
         log-likelihood, a documented substitute rather than the same quantity
-        (PROJECT_CONTEXT.md section 9).
+        (docs/design.md § Construct validity).
 
         The first token is excluded from the sum: nothing predicts it, so it has no conditional
         log-probability. When ``prefix`` is given, only the tokens of ``text`` are scored.

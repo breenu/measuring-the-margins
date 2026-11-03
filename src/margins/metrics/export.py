@@ -224,7 +224,7 @@ def render_drift_comparison_markdown(
         "For each scorer and axis pair, `model_rms` is the root-mean-square of the interaction",
         "coefficients of `harm ~ A + B + A:B` fitted on the MODEL's output **as scored by that",
         "scorer**, and `drift_rms` is the same quantity fitted on the scorer's own scores of",
-        "known-neutral text carrying the same descriptors (PROJECT_CONTEXT.md §9). Both are in SD",
+        "known-neutral text carrying the same descriptors (docs/design.md). Both are in SD",
         "units of the scorer's standardized scale. **Nothing is subtracted**: the two series are",
         "reported side by side, and `ratio = drift_rms / model_rms`.",
         "",

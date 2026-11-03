@@ -1,7 +1,7 @@
 name: CI
 
 # GitHub-hosted runners have NO GPU. Nothing in this workflow exercises a model on an
-# accelerator, and the docs must not imply otherwise (PROJECT_CONTEXT.md section 7).
+# accelerator, and the docs must not imply otherwise (docs/design.md § Environment and compute).
 
 on:
   push:
@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   core:
-    # Exactly the two environments uv.lock resolves for (PROJECT_CONTEXT.md section 7).
+    # Exactly the two environments uv.lock resolves for (docs/design.md § Environment and compute).
     name: core (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
@@ -71,7 +71,7 @@ jobs:
     # token and therefore cannot reach the gated Meta pins the dev box uses. Its outputs are
     # meaningless by construction, and that is fine: these tests check the HARNESS, not the model.
     #
-    # There is still NO GPU here (PROJECT_CONTEXT.md section 7). The NF4 path is exercised on
+    # There is still NO GPU here (docs/design.md § Environment and compute). The NF4 path is exercised on
     # Kaggle, never in CI, and the docs must not imply otherwise. On this runner the backend falls
     # back to an unquantized load and records that it did.
     name: inference extra (CPU only, no GPU on GitHub runners)
@@ -105,7 +105,7 @@ jobs:
       # `--fetch-pinned`, NOT `--write`: `--write` resolves upstream HEAD and re-pins, which on a
       # machine would silently fetch whatever the wordlist looks like today and score against a
       # version nobody recorded. This mode downloads at the revision the roster already pins and
-      # refuses to write on a digest mismatch (CLAUDE.md: never unpin to make it work).
+      # refuses to write on a digest mismatch (docs/design.md: never unpin to make it work).
       - name: Fetch the scoring lexicons at their PINNED revisions
         run: uv run python scripts/fetch_lexicons.py --fetch-pinned
 

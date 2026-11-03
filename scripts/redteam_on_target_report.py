@@ -9,7 +9,7 @@ of its named target?* Not *is it harmful* — a frame naming an identity term wa
 reached the sample, so every frame here is neutral text with one injected slot.
 
 No model is loaded and nothing is auto-labeled. Asking a model whether a model-generated prompt is
-on-target would be a scorer judging a scorer, which is what CLAUDE.md's guardrails forbid and what
+on-target would be a scorer judging a scorer, which is what design.md's guardrails forbid and what
 would make the number worthless.
 """
 

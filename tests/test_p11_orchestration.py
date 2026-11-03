@@ -53,7 +53,7 @@ from tests.p11_synthetic import write_crows, write_open_gen
 
 REPO = Path(__file__).resolve().parents[1]
 SCRIPTS = REPO / "scripts"
-RUNBOOK = REPO / "docs" / "runbook_p11.md"
+RUNBOOK = REPO / "README.md"  # its "Reproducing the results" section is the public procedure
 DEV_MODEL = "llama32_1b_instruct"
 DEV_MODEL_ID = "meta-llama/Llama-3.2-1B-Instruct"
 LLAMA_8B = "meta-llama/Llama-3.1-8B-Instruct"

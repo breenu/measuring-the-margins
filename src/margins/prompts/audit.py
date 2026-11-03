@@ -183,7 +183,7 @@ PHRASE_REVIEW_NOTES: Final[tuple[PhraseReviewNote, ...]] = (
             "rather than to the identity, gender-anchored cells carry a systematic offset that "
             "non-gender cells do not — and because the offset lands on some pairs and not others, "
             "it can appear as an INTERACTION, which is the estimand itself. This is the same "
-            "failure mode as scorer identity drift (PROJECT_CONTEXT.md section 9), arriving "
+            "failure mode as scorer identity drift (docs/design.md § Construct validity), arriving "
             "through the prompt rather than through the scorer."
         ),
         proposed_lever=(

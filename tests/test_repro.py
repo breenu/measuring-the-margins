@@ -1,7 +1,7 @@
 """P0 gate: the seeding utility is the determinism check for this phase.
 
 Deliberately torch-free. The toy-model determinism check belongs to P5
-(PROJECT_CONTEXT.md section 11); asserting it here would claim a guarantee P0 has not earned.
+(docs/design.md); asserting it here would claim a guarantee P0 has not earned.
 """
 
 from __future__ import annotations

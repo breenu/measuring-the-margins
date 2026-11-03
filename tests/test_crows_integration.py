@@ -1,6 +1,6 @@
 """CrowS-Pairs records flow through P7 and P9 exactly as open_gen ones do (P2, scope item 5).
 
-**This is the whole point of the shared record schema.** PROJECT_CONTEXT.md section 2 argues that
+**This is the whole point of the shared record schema.** docs/design.md § Architecture argues that
 the "unified intersectional metric layer" is not an algorithm bolted on at the end -- it is the
 record contract plus per-source standardization. If that is true, adding a second, maximally
 different paradigm should require *no* change to the metric or stats layers, and a CrowS

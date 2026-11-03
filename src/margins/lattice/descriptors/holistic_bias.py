@@ -3,7 +3,7 @@
 **HolisticBias is not a benchmark and must never be implemented as one.** It supplies identity
 *descriptor terms* with provenance; it does not supply items to ingest. ``open_gen`` is a
 generation path, and modelling this source as a ``BenchmarkLoader`` returning ``list[Item]``
-would misfile the whole generation vertical (PROJECT_CONTEXT.md section 5). Nothing in this
+would misfile the whole generation vertical (docs/design.md § Architecture). Nothing in this
 module produces an :class:`~margins.schemas.Item`.
 
 What it does provide:

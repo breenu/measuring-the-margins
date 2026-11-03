@@ -215,7 +215,7 @@ def test_powered_cells_exclude_the_descriptive_ones(tiny: DeclaredLattice) -> No
 
 
 def test_shipped_non_gender_confirmatory_pairs_project_as_powered(shipped: DeclaredLattice) -> None:
-    """Go/no-go criterion 5 (PROJECT_CONTEXT.md section 13), checked at the config stage."""
+    """Go/no-go criterion 5 (docs/design.md § Scope), checked at the config stage."""
     config = shipped.config
     non_gender = config.non_gender_confirmatory_pairs
     assert len(non_gender) >= 2

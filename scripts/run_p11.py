@@ -141,7 +141,7 @@ def newest_run_file(out_dir: Path, model: str, *, dry_run: bool = False) -> Path
         raise StepFailedError(
             f"{directory} holds {len(files)} run files ({names}). Scoring takes exactly one. "
             "Keep the complete run and move the others OUT of data/ (do not delete them) -- see "
-            "docs/runbook_p11.md section F."
+            "the README's 'Reproducing the results' section."
         )
     return files[0]
 
@@ -601,7 +601,7 @@ def cmd_smoke(cfg: P11Config, args: argparse.Namespace) -> int:
         print("\nThe correction path, the claim gate and the figure all ran on real P7 output.")
         print("You may proceed to the full run (runbook section C).")
         return 0
-    print("\nDO NOT PROCEED to the full run. See docs/runbook_p11.md section F.")
+    print("\nDO NOT PROCEED to the full run. See the README's 'Reproducing the results' section.")
     return 1
 
 

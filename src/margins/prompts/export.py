@@ -12,7 +12,7 @@ environments.
 template files** produced a prompt set. Before P4a a manifest could not answer "what identity
 lattice was this run built from"; that provenance hole is what this closes.
 
-Outputs land under ``data/prompts/`` — gitignored and regenerable (PROJECT_CONTEXT.md section 4).
+Outputs land under ``data/prompts/`` — gitignored and regenerable (docs/design.md).
 """
 
 from __future__ import annotations
@@ -53,7 +53,7 @@ __all__ = [
     "write_prompts",
 ]
 
-#: Raw text goes to JSONL (PROJECT_CONTEXT.md section 6). Versioned in the filename; every record
+#: Raw text goes to JSONL (docs/design.md). Versioned in the filename; every record
 #: also carries ``template_version``, so the file name and the contents cannot disagree silently.
 PROMPTS_FILENAME = "prompts_v1.jsonl"
 FILL_AUDIT_FILENAME = "template_fill_audit.md"

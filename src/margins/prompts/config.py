@@ -79,7 +79,7 @@ __all__ = [
 #: The prompt set shipped with the repo.
 DEFAULT_PROMPT_SET: Final[str] = "open_gen_v1"
 
-#: Template files live in a subdirectory of the prompt config dir (PROJECT_CONTEXT.md section 4).
+#: Template files live in a subdirectory of the prompt config dir (docs/design.md).
 TEMPLATE_DIRNAME: Final[str] = "templates"
 
 #: Carriers multiply the prompt set: |templates| x |cells| x |carriers|. The confirmatory set is
