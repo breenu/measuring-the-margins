@@ -12,19 +12,22 @@ intersections, and all of it at **accessible compute**: no industrial GPU. The f
 run used one 16 GB GPU, and an independent rerun has been tested on free-tier cloud hardware (see
 [Compute](#compute) for exactly what that rerun did and did not reproduce).
 
-## Status
+## What this repository contains
 
-The instrument (P0–P10) is built, the confirmatory run (P11) is done, and the paper (P12) is in
-progress. The pre-registration is tagged `prereg-v1`; every amendment since is logged in
-[`docs/preregistration.md`](docs/preregistration.md) §10, each one dated before the data it governs.
-
-| | |
-|---|---|
-| **P0–P10** — environment, schemas, lattice, prompts, inference, scoring, estimator, statistics, CrowS-Pairs, red-teaming, figures | ✅ built and tested |
-| **P11** — the confirmatory run: 47,680 responses from Llama-3.1-8B-Instruct and Mistral-7B-Instruct-v0.3 | ✅ done (Oct 2026) |
-| **E4** (temperature/seed sensitivity), **R2** (reproducibility rerun) | ✅ E4 done · ✅ R2 done on free-tier and same hardware: FAIL by the pre-registered rule (32/36 each), diagnosed |
-| Human calibration of the scorers, red-team on-target audit | ✅ done (one labeller) |
-| **P12** paper · **P13** release (Zenodo archive of the raw responses) | in progress / to do |
+- **The instrument**: the identity lattice, prompt renderers, inference harness, scoring (with the
+  scorer identity-drift control), the emergence estimator, the statistics stage, the CrowS-Pairs
+  sentence-pair arm, cell-targeted red-teaming, and the figure and table builders, all built and
+  tested.
+- **The pre-registration**, tagged `prereg-v1`, with every amendment dated in
+  [`docs/preregistration.md`](docs/preregistration.md) §10.
+- **The confirmatory run**: 47,680 responses from Llama-3.1-8B-Instruct and
+  Mistral-7B-Instruct-v0.3.
+- **Decoding sensitivity (E4) and the reproducibility rerun (R2)**, the rerun on free-tier and on
+  the same hardware. R2 **fails** its pre-registered rule (32/36 terms on each), diagnosed in
+  [`docs/r2_diagnosis.md`](docs/r2_diagnosis.md).
+- **Human calibration of the scorers** and a red-team on-target audit (one labeller).
+- **Raw responses are not in this repository.** They will be archived on publication, gated, with
+  a content warning.
 
 ## Results of the confirmatory run
 
@@ -86,7 +89,7 @@ around a resolution failure.
 
 ## Quality gates
 
-All must pass before crossing a phase boundary:
+All must pass before a change is committed:
 
 ```bash
 uv run pytest -q
@@ -177,7 +180,7 @@ uv run python scripts/run_p11.py r2-process --machine kaggle
 The R2 result reported here is a **failure** of that rule (32 of 36 terms on both machines); see
 [`docs/r2_diagnosis.md`](docs/r2_diagnosis.md).
 
-## What P0 gives you
+## Reproducibility core
 
 - **`margins.repro.set_global_seed`** — seeds `random`, legacy global `numpy`, `PYTHONHASHSEED`
   and (when present) `torch`, returns a frozen `SeedReport` recording *what was actually set*
@@ -193,7 +196,7 @@ The R2 result reported here is a **failure** of that rule (32 of 36 terms on bot
   reproducer will read. `run_id` is derived from the config hash and a recorded timestamp, not
   randomly generated.
 
-## What P1 gives you
+## Records and contracts
 
 - **`margins.schemas`** — the frozen, source-agnostic records that *are* the unified metric
   layer. Every stage depends on these and on nothing else of any other stage. Records are
@@ -211,11 +214,11 @@ Two invariants are enforced structurally rather than by review: only `EffectEsti
 significance fields (`CellStat` is descriptive and has no `p`/`q` at all), and no shared record
 may carry a source-specific field — source quirks live only in `Item.payload`.
 
-## What P3 gives you
+## The identity lattice
 
 - **`configs/lattice/confirmatory_v1.yaml`** — the lattice declaration, and **pre-registration
   material**: 5 axes, 18 descriptor values, and the named axis pairs. The 6 confirmatory pairs
-  *are* the FDR family; 4 of them are non-gender × non-gender (gate P3 / novelty claim 5).
+  *are* the FDR family; 4 of them are non-gender × non-gender.
 - **`margins.lattice.LatticeConfig`** — Hydra composes the plain YAML, Pydantic validates it, and
   three rules are structural rather than conventional: a value with no source does not load,
   a lattice with fewer than two non-gender × non-gender confirmatory pairs does not load, and the
@@ -232,15 +235,16 @@ may carry a source-specific field — source quirks live only in `Item.payload`.
   *before* any run; `data/lattice/value_provenance.md` traces every value to its source. Both are
   byte-deterministic across Windows and Linux.
 
-`min_cell_n` is a **pre-registered placeholder**; TODO(P9) derives the real threshold from the
-power analysis (α=0.05, power=0.8). No power computation happens in P3.
+`min_cell_n` (108 renderings per cell) was derived from the power analysis at the measured
+intraclass correlation (α=0.05, power=0.8); see
+[`docs/power_and_precision.md`](docs/power_and_precision.md).
 
 ```bash
 uv run python scripts/fetch_holistic_bias.py    # once: retrieve the pinned descriptors
 uv run python scripts/build_lattice.py --verify # build, verify every term, write both exports
 ```
 
-## What P6 gives you
+## Scoring and the identity-drift control
 
 - **`configs/scoring/default_v1.yaml`** — the scorer roster, and two rules that are **structural
   rather than conventional**: a harm type measured by fewer than two scorers does not load, and
@@ -253,20 +257,21 @@ uv run python scripts/build_lattice.py --verify # build, verify every term, writ
   mis-signed scorer inverts every downstream effect while producing entirely plausible output.
 - **`margins.scoring.Triangulator`** — runs the roster and reports Krippendorff's α (interval, over
   `standardized`) and pairwise Cohen's κ. Agreement is an emitted artifact, not an internal check,
-  because §9 makes it a precondition for a harm type being load-bearing.
+  because the design makes it a precondition for a harm type being load-bearing
+([`docs/design.md`](docs/design.md), Construct validity).
 - **`margins.scoring.drift`** — the **identity-drift control**, built as a designed experiment.
   Known-neutral text carrying the same descriptors is scored through every scorer, in two families:
-  the P4a prompts themselves, and neutral declaratives rendered through the *same* `TemplateRenderer`
+  the audit prompts themselves, and neutral declaratives rendered through the *same* `TemplateRenderer`
   (so the control inherits the leakage guard and article rule rather than reimplementing them).
-  Both series are emitted; **nothing is point-subtracted** — P7 fits `A + B + A:B` on each and
+  Both series are emitted; **nothing is point-subtracted** — the estimator fits `A + B + A:B` on each and
   reports them side by side.
 - **`margins.scoring.calibration`** — sampling, the label schema, and precision/recall. The sample is
-  deterministic and stratified by cell order × scorer disagreement. **The labeling is the human's.**
+  deterministic and stratified by cell order × scorer disagreement. **The labels come from a human labeller.**
 - **Artifacts** — `data/scoring/{scores,drift_control}.parquet` (the project's first Parquet:
   determinism here is *round-trip content equality on a sorted frame*, **not** byte identity, because
   Parquet embeds writer metadata) plus a byte-deterministic `agreement.csv` / `agreement.md`.
 
-## What P7 gives you
+## The emergence estimator
 
 - **`margins.metrics.EmergenceMetric`** — the primary estimand. Per (benchmark, model, harm type,
   axis pair) it fits `harm_std ~ A + B + A:B` by OLS over the pair's order-2 cells with sum-to-zero
@@ -274,7 +279,7 @@ uv run python scripts/build_lattice.py --verify # build, verify every term, writ
   harm *level* at a cell is a `CellStat`, not emergence. `harm_std` is the mean of the harm type's
   scorers' standardized scores per response; a response missing a scorer is refused, not imputed.
 - **Standard errors are cluster-robust by item (prompt); CIs are a cluster bootstrap over items,
-  stratified by cell.** The ~50 sampled generations per prompt are repeated observations, not
+  stratified by cell.** The sampled generations of one prompt are repeated observations, not
   independent ones, and the tests prove the clustering is doing its job: with a strong item
   intercept the clustered SE is 2–4× the iid one, grows with seeds per item, and matches the
   analytic sampling SD. The sandwich is recomputed by hand in the tests.
@@ -283,15 +288,16 @@ uv run python scripts/build_lattice.py --verify # build, verify every term, writ
   (the estimator does not fabricate emergence); calibration is checked over repeated datasets.
 - **The drift series is fitted by the same estimator** — per scorer, per control family, never
   pooled — and reported **beside** the model's interaction as a ratio and a flag. Nothing is
-  subtracted; the two thresholds are declared placeholders until P9 pre-registers them.
+  subtracted; the downgrade threshold (0.5) is pre-registered and enforced by the statistics
+  stage.
 - **Nothing here sets `p`, `q`, `family_size` or `correction`**; `data/metrics/effects.parquet` is
-  the uncorrected table P9's StatsEngine reads.
+  the uncorrected table the statistics stage reads.
 
 ```bash
 uv run python scripts/run_metrics.py                        # data/metrics/ + a manifest
 ```
 
-Scorer pins are **resolved, never authored**, exactly as the P5 model pins are, and both verifiers
+Scorer pins are **resolved, never authored**, exactly as the model pins are, and both verifiers
 stop rather than substituting:
 
 ```bash
