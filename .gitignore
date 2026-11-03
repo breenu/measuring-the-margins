@@ -52,3 +52,9 @@ Thumbs.db
 
 # Machine-local Claude Code permission state — not project config.
 .claude/settings.local.json
+
+# Internal working notes: kept locally, not part of the public repository.
+CLAUDE.md
+docs/PROJECT_CONTEXT.md
+docs/runbook_p11.md
+scripts/p0_demo.py
