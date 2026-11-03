@@ -194,9 +194,10 @@ def build(source: NumberSource) -> FigureSpec:
 
     low = source.number("field.power_at_9_prompts.min")
     high = source.number("field.power_at_9_prompts.max")
+    effect = source.number("power.effect_size")
     figure.suptitle(
-        f"A conventional intersectional audit reaches {low.value:.0%}–{high.value:.0%} power "
-        "on a moderate effect",
+        f"A nine-prompt design reaches {low.value:.0%}–{high.value:.0%} power "
+        f"on a {effect.value:g} SD interaction",
         x=0.02,
         ha="left",
         fontweight="bold",

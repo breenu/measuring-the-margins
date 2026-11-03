@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="516.463912pt" height="299.542945pt" viewBox="0 0 516.463912 299.542945" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="500.544pt" height="299.542945pt" viewBox="0 0 500.544 299.542945" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
@@ -21,8 +21,8 @@
  <g id="figure_1">
   <g id="patch_1">
    <path d="M 0 299.542945 
-L 516.463912 299.542945 
-L 516.463912 -0 
+L 500.544 299.542945 
+L 500.544 -0 
 L 0 -0 
 z
 " style="fill: #ffffff"/>
@@ -731,7 +731,7 @@ z
 " style="fill: #f1f2f4; stroke-dasharray: 2.59,1.12; stroke-dashoffset: 0; stroke: #9aa1ab; stroke-width: 0.7; stroke-linejoin: miter"/>
    </g>
    <g id="text_39">
-    <text style="font-weight: 700; font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #26282b" x="298.742505" y="190.074382" transform="rotate(-0 298.742505 190.074382)">EXPLORATORY — cells the red-team arm surfaces most</text>
+    <text style="font-weight: 700; font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #26282b" x="298.742505" y="190.105007" transform="rotate(-0 298.742505 190.105007)">EXPLORATORY — largest |red-team γ| − |static γ|</text>
    </g>
    <g id="text_40">
     <text style="font-size: 6.2px; font-family: 'DejaVu Sans'; fill: #26282b" transform="translate(298.742505 206.442803)">ability × race · Deaf × Black · toxicity</text>

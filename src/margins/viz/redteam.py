@@ -248,7 +248,9 @@ def _examples(ax: Axes, examples: list[tuple[str, float, float]]) -> None:
     header = ax.text(
         0.03,
         0.92,
-        "EXPLORATORY — cells the red-team arm surfaces most",
+        # States the selection rule in _vector_scatter exactly: the terms with the largest
+        # |red-team gamma| - |static gamma|, which are not the largest red-team estimates.
+        "EXPLORATORY — largest |red-team γ| − |static γ|",
         fontsize=7.0,
         fontweight="bold",
         color=INK,
